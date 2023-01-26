@@ -10,7 +10,7 @@ Initial set up of the database project "EasyBytes" for CS348
 - Richa Dalal
 - Soham Shah
 
-# How to create and load the sample datase.
+# How to create and load the sample database.
 
 We wil be using a mySQL database.
 
