@@ -1,8 +1,8 @@
 # EasyBytes
 
-![EasyBytesLogo](https://user-images.githubusercontent.com/65190493/214759224-2ca6f9b6-a8b6-4b7c-9a8f-bf91a9ab50f5.png)
-
 EasyBytes is a social recipe sharing platform that allows users to search for their favourite foods. We are on a mission to enable all home cooks to have easy access to recipes so they don’t have an excuse to not cook and enable them to try out new cuisines. The web based application will host a large number of recipes from varying global cuisines.
+
+![EasyBytesLogo](https://user-images.githubusercontent.com/65190493/214759224-2ca6f9b6-a8b6-4b7c-9a8f-bf91a9ab50f5.png)
 
 This repo contains the initial set up of the database project "EasyBytes" for CS348
 
@@ -23,7 +23,7 @@ We wil be using a mySQL database.
 
 3) Ensure that you have the correct flags set to 1 (to allow file imports)
 
-```OPT_LOCAL_INFILE=1```
+```OPT_LOCAL_INFILE=1```\
 Run the command: ```SET GLOBAL local_infile=1``` if needed
 
 4) Create the recipes database in MySQL
@@ -63,7 +63,7 @@ LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/t
 
 # How to create and load the production database with a large "production" dataset.
 
-Recipe data will be retrieved from https://www.edamam.com/ using a GET request
+Recipe data will be retrieved from https://www.edamam.com/ using a GET request\
 There will be a Python script that gets the data, formats it and pushes to the desire table in the database
 
 Coming Soon ...
