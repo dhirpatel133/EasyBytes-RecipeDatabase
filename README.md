@@ -12,7 +12,7 @@ This repo contains the initial set up of the database project "EasyBytes" for CS
 - Richa Dalal
 - Soham Shah
 
-# How to create and load the sample database with a small dataset.
+# How to create and load the sample database
 
 We wil be using a mySQL database.
 
@@ -23,7 +23,7 @@ We wil be using a mySQL database.
 
 3) Ensure that you have the correct flags set to 1 (to allow file imports)
 
-```OPT_LOCAL_INFILE=1```\
+```OPT_LOCAL_INFILE=1```\\
 Run the command: ```SET GLOBAL local_infile=1``` if needed
 
 4) Create the recipes database in MySQL
@@ -61,7 +61,7 @@ LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/t
   
 5) Database has been created and loaded to the sample platform. Refer to the db/Creating_Loading_Recipe.sql which will create the table and load information from recipe.csv.
 
-# How to create and load the production database with a large "production" dataset.
+# How to create and load the production database
 
 Recipe data will be retrieved from https://www.edamam.com/ using a GET request\
 There will be a Python script that gets the data, formats it and pushes to the desire table in the database
