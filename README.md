@@ -26,23 +26,25 @@ To choose a database:
 To create the table:
 
 ```
-CREATE TABLE table_name
+CREATE TABLE recipe
   ( 
-     column_1_name     DECIMAL(9, 0) NOT NULL PRIMARY KEY, 
-     column_2_name    VARCHAR(30), 
-     column3_name    VARCHAR(30), 
+     recipeID     DECIMAL(9, 0) NOT NULL PRIMARY KEY, 
+     recipeName    VARCHAR(30), 
+     cuisine    VARCHAR(30), 
+     ingredients VARCHAR(100), 
+     steps      VARCHAR(100) 
   );
   ```
 
 4) Import the CSV file into the SQL table that was made.
 
 ```
-LOAD DATA LOCAL INFILE 'path/filename.csv' 
-	INTO TABLE table_name 
+LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/testdb/recipe.csv' 
+	INTO TABLE recipe 
 	FIELDS TERMINATED BY ',' 
 	ENCLOSED BY '"'
 	LINES TERMINATED BY '\n';
 ```
   
-  5) Database has been created and loaded to the sample platform.
+  5) Database has been created and loaded to the sample platform. Refer to the db/ which will create the table and loads information from recipe.csv.
 
