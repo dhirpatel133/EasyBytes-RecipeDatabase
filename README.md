@@ -15,7 +15,7 @@ We wil be using a mySQL database.
 1) Download the mySQL server and mySQL workbench.
 2) Access the mySQL shell using the terminal
 
-mysql –u username –p
+```mysql –u username –p```
 
 3) Create a mySQL table to import the CSV file.
 
@@ -32,15 +32,15 @@ To create the table:
      major    VARCHAR(25), 
      standing VARCHAR(2), 
      age      DECIMAL(3, 0) 
-  ); ```
+  );```
 
 4) Import the CSV file into the SQL table that was made.
 
-```  LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/testdb/student.csv' 
+```LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/testdb/student.csv' 
 	INTO TABLE student 
 	FIELDS TERMINATED BY ',' 
 	ENCLOSED BY '"'
-	LINES TERMINATED BY '\n'; ```
+	LINES TERMINATED BY '\n';```
   
   5) Database has been created and loaded to the sample platform.
 
