@@ -10,7 +10,7 @@ app.use(cors())
 const connection = mysql2.createConnection({
   host: 'localhost',
   port: 3306,
-  database: 'sample_db',
+  database: 'recipe_db',
   user: 'root',
   password: 'root'
 });
@@ -28,7 +28,7 @@ connection.connect(function (err) {
 app.get('/', (req, res) => {
   //res.send('Backend: Hello World!')
   connection.query(
-    'SELECT name FROM student',
+    'SELECT name, cuisine FROM recipes',
     function(err, results, fields) {
       res.send(results); // results contains rows returned by server
     }

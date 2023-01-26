@@ -9,7 +9,7 @@ const App = () => {
         let url = 'http://localhost:5000/'; 
         const [data, setData] = useState("");
       
-        const subscribeMe = async (event) => {
+        const getData = async (event) => {
           const res = await fetch(url);    
           const data = await res.json();
           console.log(data);
@@ -21,16 +21,16 @@ const App = () => {
           <div className="App">
             <h1>Welcome to EasyByte</h1>
             <h2>Click the Button Below to Retrive Data from a MySQL Database!</h2>
-            <button onClick={subscribeMe}>Get Data</button>
+            <button onClick={getData}>Get Data</button>
             <br />
             <span>
             {" "}
             <div>
                 {data === "" ? <h1> </h1> : 
-                <div><h3>Here is a list of Students in the Student Table</h3>
+                <div><h3>Here is a list of Dishes and Cuisines in the Recipe Table</h3>
                 <ol>
-                {data.map(name => (
-                    <li key={name}>{name['name']}</li>
+                {data.map(dish => (
+                    <li key={dish}>{dish['name']} - {dish['cuisine']}</li>
                 ))}
             </ol></div>}
             </div>

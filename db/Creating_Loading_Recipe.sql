@@ -1,16 +1,18 @@
-USE sample_db;
-CREATE TABLE recipe
+CREATE DATABASE recipe_db;
+
+USE recipe_db;
+CREATE TABLE recipes
   ( 
-     recipeID     DECIMAL(9, 0) NOT NULL PRIMARY KEY, 
-     recipeName    VARCHAR(30), 
+     id     DECIMAL(9, 0) NOT NULL PRIMARY KEY, 
+     name    VARCHAR(30), 
      cuisine    VARCHAR(30), 
      ingredients VARCHAR(100), 
      steps      VARCHAR(100) 
-  ); 
-USE sample_db;
+  );
+
+USE recipe_db;
   LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/testdb/recipe.csv' 
-	INTO TABLE recipe 
+	INTO TABLE recipes
 	FIELDS TERMINATED BY ',' 
 	ENCLOSED BY '"'
 	LINES TERMINATED BY '\n';
-    
