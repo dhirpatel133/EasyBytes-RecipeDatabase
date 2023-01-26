@@ -25,22 +25,22 @@ To choose a database:
 
 To create the table:
 
-CREATE TABLE student
+```CREATE TABLE student
   ( 
      snum     DECIMAL(9, 0) NOT NULL PRIMARY KEY, 
      sname    VARCHAR(30), 
      major    VARCHAR(25), 
      standing VARCHAR(2), 
      age      DECIMAL(3, 0) 
-  ); 
+  ); ```
 
 4) Import the CSV file into the SQL table that was made.
 
-  LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/testdb/student.csv' 
+```  LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/testdb/student.csv' 
 	INTO TABLE student 
 	FIELDS TERMINATED BY ',' 
 	ENCLOSED BY '"'
-	LINES TERMINATED BY '\n';
+	LINES TERMINATED BY '\n'; ```
   
   5) Database has been created and loaded to the sample platform.
 
