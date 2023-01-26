@@ -23,7 +23,7 @@ We wil be using a mySQL database.
 
 3) Ensure that you have the correct flags set to 1 (to allow file imports)
 
-```OPT_LOCAL_INFILE=1```\\
+```OPT_LOCAL_INFILE=1```<br>
 Run the command: ```SET GLOBAL local_infile=1``` if needed
 
 4) Create the recipes database in MySQL
