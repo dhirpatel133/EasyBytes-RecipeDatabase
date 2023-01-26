@@ -46,5 +46,5 @@ LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/t
 	LINES TERMINATED BY '\n';
 ```
   
-  5) Database has been created and loaded to the sample platform. Refer to the db/ which will create the table and loads information from recipe.csv.
+  5) Database has been created and loaded to the sample platform. Refer to the db/Creating_Loading_Recipe.sql which will create the table and loads information from recipe.csv.
 
