@@ -21,7 +21,7 @@ mysql –u username –p
 
 To choose a database:
 
-USE sample_db;
+```USE sample_db;```
 
 To create the table:
 
