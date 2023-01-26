@@ -38,7 +38,7 @@ CREATE TABLE student (
 4) Import the CSV file into the SQL table that was made.
 
 ```
-LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/testdb/student.csv' 
+  LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/testdb/student.csv' 
 	INTO TABLE student 
 	FIELDS TERMINATED BY ',' 
 	ENCLOSED BY '"'
