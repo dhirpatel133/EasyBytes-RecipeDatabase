@@ -1,5 +1,7 @@
 # EasyBytes
 
+![EasyBytesLogo](https://user-images.githubusercontent.com/65190493/214759224-2ca6f9b6-a8b6-4b7c-9a8f-bf91a9ab50f5.png)
+
 Initial set up of the database project "EasyBytes" for CS348
 
 # Team Members:
