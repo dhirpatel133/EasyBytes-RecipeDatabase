@@ -1,6 +1,10 @@
 import express from 'express';
 import mysql2 from 'mysql2'
 import cors from 'cors';
+import fs from 'fs'
+import { parse } from 'csv-parse';
+
+//Bcrypt
 
 const app = express()
 const port = 5000
@@ -34,6 +38,17 @@ app.get('/', (req, res) => {
     }
   );
 })
+
+/*app.get('/test', (req, res) => {
+  //res.send('Backend: Hello World!')
+  fs.createReadStream("../db/sample-data/post-sample.csv")
+    .pipe(parse({ delimiter: ",", from_line: 2 }))
+    .on("data", function (row) { 
+      connection.query(
+        `INSERT INTO posts VALUES (${row[0]}, ${row[1]}, ${row[2]}, '${row[3]}', '${row[4]}')`,
+      );
+    })
+})*/
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
