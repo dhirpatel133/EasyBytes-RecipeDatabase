@@ -64,7 +64,7 @@ LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/t
 
 # How to create and load the production database
 
-Recipe data will be retrieved from https://www.edamam.com/ using a GET request\
+Recipe data will be retrieved from https://spoonacular.com/ using a GET request\
 There will be a Python script that gets the data, formats it and pushes to the desired table in the database
 
 Coming Soon ...
