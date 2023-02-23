@@ -3,6 +3,8 @@ import mysql2 from 'mysql2'
 import cors from 'cors';
 import fs from 'fs'
 import { parse } from 'csv-parse';
+import readline from 'readline'
+import { populateTables } from './sample-populate-db.js';
 
 //Bcrypt
 
@@ -29,10 +31,22 @@ connection.connect(function (err) {
   }
 });
 
+populateTables(connection);
+
 app.get('/', (req, res) => {
   //res.send('Backend: Hello World!')
   connection.query(
     'SELECT name, cuisine FROM recipes',
+    function(err, results, fields) {
+      res.send(results); // results contains rows returned by server
+    }
+  );
+})
+
+app.get('/hi', (req, res) => {
+  //res.send('Backend: Hello World!')
+  connection.query(
+    'SHOW tables',
     function(err, results, fields) {
       res.send(results); // results contains rows returned by server
     }
