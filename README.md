@@ -81,5 +81,3 @@ To run the backend:
 - In the terminal, type the following command to startup the backend: npm start
 - The backend service will run on port 5000
 - Once the backend has started, it will spin up a local connection with MySQL which will run on port 3306 to store/fetch data from the db.
-
-Coming Soon ...
