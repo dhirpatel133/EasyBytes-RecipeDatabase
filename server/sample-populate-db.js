@@ -29,7 +29,6 @@ function populateTables(connection) {
     fs.createReadStream("../db/sample-data/user-sample.csv")
         .pipe(parse({ delimiter: ",", from_line: 2 }))
         .on("data", function (row) {
-          console.log(row) 
           connection.query(
             `INSERT INTO users VALUES (${parseInt(row[0])}, '${row[1]}', '${row[2]}', '${row[3]}', '${row[4]}', '${row[5]}', '${row[6]}', '${row[7]}', '${row[8]}')`,
           );

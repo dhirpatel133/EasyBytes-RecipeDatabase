@@ -8,11 +8,6 @@ import { populateTables } from './sample-populate-db.js';
 
 //Bcrypt
 
-const app = express()
-const port = 5000
-
-app.use(cors())
-
 const connection = mysql2.createConnection({
   host: 'localhost',
   port: 3306,
@@ -32,6 +27,11 @@ connection.connect(function (err) {
 });
 
 populateTables(connection);
+
+const app = express()
+const port = 5000
+
+app.use(cors())
 
 app.get('/', (req, res) => {
   //res.send('Backend: Hello World!')
