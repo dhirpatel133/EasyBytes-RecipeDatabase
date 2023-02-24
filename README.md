@@ -67,4 +67,19 @@ LOAD DATA LOCAL INFILE '/Users/owner/Desktop/cs348/project/codesample/Database/t
 Recipe data will be retrieved from https://spoonacular.com/ using a GET request\
 There will be a Python script that gets the data, formats it and pushes to the desired table in the database
 
+# How to run the Frontend and Backend
+
+To run the frontend:
+First, clone the entire repo in an IDE of your choice in your local computer.
+Then, open the terminal and navigate to the client/ directory. (cd client)
+In the terminal, type the following command to startup the frontend: npm start
+The frontend will run on port 3000
+
+To run the backend:
+First, clone the entire repo in an IDE of your choice in your local computer.
+Then, open the terminal and navigate to the server/ directory. (cd server)
+In the terminal, type the following command to startup the backend: npm start
+The backend service will run on port 5000
+Once the backend has started, it will spin up a local connection with MySQL which will run on port 3306 to store/fetch data from the db.
+
 Coming Soon ...
