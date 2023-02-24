@@ -1,4 +1,3 @@
-import mysql2 from 'mysql2'
 import fs from 'fs'
 import { parse } from 'csv-parse';
 import readline from 'readline'
@@ -30,7 +29,7 @@ function populateTables(connection) {
         .pipe(parse({ delimiter: ",", from_line: 2 }))
         .on("data", function (row) {
           connection.query(
-            `INSERT INTO users VALUES (${parseInt(row[0])}, '${row[1]}', '${row[2]}', '${row[3]}', '${row[4]}', '${row[5]}', '${row[6]}', '${row[7]}', '${row[8]}')`,
+            `INSERT IGNORE INTO users VALUES (${parseInt(row[0])}, '${row[1]}', '${row[2]}', '${row[3]}', '${row[4]}', '${row[5]}', '${row[6]}', '${row[7]}', '${row[8]}')`,
           );
         })
       
@@ -38,7 +37,7 @@ function populateTables(connection) {
         .pipe(parse({ delimiter: ",", from_line: 2 }))
         .on("data", function (row) { 
           connection.query(
-            `INSERT INTO recipes VALUES (${parseInt(row[0])}, '${row[1]}', '${row[2]}', ${parseInt(row[3])}, '${row[4]}', '${row[5]}', ${parseInt(row[6])}, '${row[7]}', '${row[8]}', ${parseInt(row[9])}, ${parseInt(row[10])}, '${row[11]}')`,
+            `INSERT IGNORE INTO recipes VALUES (${parseInt(row[0])}, '${row[1]}', '${row[2]}', ${parseInt(row[3])}, '${row[4]}', '${row[5]}', ${parseInt(row[6])}, '${row[7]}', '${row[8]}', ${parseInt(row[9])}, ${parseInt(row[10])}, '${row[11]}')`,
           );
         })
       
