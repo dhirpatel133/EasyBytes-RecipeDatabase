@@ -39,24 +39,28 @@ We wil be using a mySQL database.
 
 The backend connects to the local instance of your MySQL server using the following code:
 
-```const connection = mysql2.createConnection({
+```
+const connection = mysql2.createConnection({
   host: 'localhost',
   port: 3306,
   database: 'recipe_db',
   user: 'root',
   password: 'root'
-});```
-
+});
+```
 Note: You need to replace the password and user in the connection object above with the password and username you have set on your local machine
 
 There is a file under the server folder named populate-db-sample-data.js which will use the createtables.sql file to create the required tables as well as populate the tables with the sample data which can be found [here](./db/sample-data)
 
 To populate the tables with sample data, run the following commands:
-```cd server```
-```npm i```
-```node populate-db-sample-data.js```
 
-Once, you see the following output on the console ```Populated tables with sample data!"```, run the command, ```Ctrl + C```
+```
+cd server
+npm i
+node populate-db-sample-data.js
+```
+
+Once, you see the following output on the console ```Populated tables with sample data!```,  run the command, ```Ctrl + C``` to end the process
 
 # How to create and load the production database
 
