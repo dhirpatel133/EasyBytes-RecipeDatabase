@@ -86,6 +86,4 @@ To run the backend:
 
 # Features currently supported by Application
 - Show all recipe posts
-- Create new recipe post
-- Delete recipe post made by User
 - View recipes based on custom criteria
