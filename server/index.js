@@ -65,7 +65,6 @@ app.get('/getCustomPosts', (req, res) => {
   let baseQuery = "SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id"
   let filterOnlyQuery = " WHERE "
   let sortOnlyQuery = ` ORDER BY ${sortValue}`
-  //let filterAndSortQuery = `SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE ${filterCategory} LIKE '%${filterValue}%' ORDER BY ${sortCategory} ${sortValue}`
   let finalQuery = baseQuery;
   
   if (filterCategory && filterValue && sortValue === undefined) {
@@ -73,7 +72,7 @@ app.get('/getCustomPosts', (req, res) => {
     let filterValues = filterValue.split(',')
     finalQuery += filterOnlyQuery
     for (let i = 0; i < filterCategories.length; i++) {
-      finalQuery += `${filterCategories[i]} LIKE '%${filterValues[i]}%`
+      finalQuery += `${filterCategories[i]} LIKE '%${filterValues[i]}%'`
       if (i != filterCategories.length - 1) {
         finalQuery += " AND "
       }
@@ -94,6 +93,7 @@ app.get('/getCustomPosts', (req, res) => {
     }
     finalQuery += sortOnlyQuery
   }
+  console.log(finalQuery)
 
   connection.query(
     finalQuery,

@@ -10,12 +10,13 @@ let url = 'http://localhost:5000/';
 
 
 const App = () => {
+  const [data, setData] = useState({"cuisine": '', "meal_type": '', "diet_label": '', "sort": ''});
   return (
     <div className="App">
       <header><MainNavBar/></header>
-      <SelectionModel style={{padding: 300}}></SelectionModel>
+      <SelectionModel style={{padding: 300}} toChild={data} sendToParent={setData}></SelectionModel>
       <div>
-          <AllRecipes></AllRecipes>
+          <AllRecipes search={data}></AllRecipes>
       </div>
     </div>
   );

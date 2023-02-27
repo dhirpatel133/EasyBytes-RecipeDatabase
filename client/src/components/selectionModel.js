@@ -20,6 +20,7 @@ const MenuProps = {
 };
 
 const filter_by_cuisine = [
+  "Any",
   "Mediterranean",
   "British",
   "French",
@@ -30,6 +31,7 @@ const filter_by_cuisine = [
 ];
 
 const filter_by_meal_type = [
+  "Any",
   "Breakfast",
   "Lunch",
   "Side Dish",
@@ -38,6 +40,7 @@ const filter_by_meal_type = [
 ];
 
 const filter_by_diet_label = [
+  "Any",
   "Vegetarian",
   "Vegan",
   "Dairy Free",
@@ -45,6 +48,7 @@ const filter_by_diet_label = [
 ];
 
 const sort_categories = [
+  "Any",
   "Calories (ASC)",
   "Calories (DESC)",
   "Cook Time (ASC)",
@@ -55,7 +59,7 @@ const sort_categories = [
   "Health Score (DESC)"
 ];
 
-const SelectionModel = () => {
+const SelectionModel = (props) => {
   const [cuisine, setCuisine] = React.useState([]);
   const [meal, setMeal] = React.useState([]);
   const [diet, setDiet] = React.useState([]);
@@ -167,7 +171,7 @@ const SelectionModel = () => {
           ))}
         </Select>
       </FormControl>
-      <Button variant="contained" style={{height: 55, width: 200}}>Search for Recipes</Button>
+      <Button variant="contained" style={{height: 55, width: 200}} onClick={() => {props.sendToParent({"cuisine": cuisine, "meal_type": meal, "diet_label": diet, "sort": sort})}}>Search for Recipes</Button>
         </div>
     </Stack>
     </div>
