@@ -3,5 +3,6 @@ import ReactDOM from 'react-dom';
 
 import App from './App';
 import RecipeReviewCard from './components/recipeCard';
+import AllRecipes from './components/allRecipes';
 
-ReactDOM.render(<RecipeReviewCard />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));

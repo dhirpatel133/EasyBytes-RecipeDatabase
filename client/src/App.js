@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios'
+import { CircularProgress, Grid } from '@mui/material';
+import RecipeReviewCard from './components/recipeCard';
 
 
 let url = 'http://localhost:5000/'; 
 
 
 const App = () => {
-        let url = 'http://localhost:5000/'; 
+        let url = 'http://localhost:5000/getAllPosts'; 
         const [data, setData] = useState("");
       
         const getData = async (event) => {
@@ -26,13 +28,17 @@ const App = () => {
             <span>
             {" "}
             <div>
-                {data === "" ? <h1> </h1> : 
-                <div><h3>Here is a list of Dishes and Cuisines in the Recipe Table</h3>
-                <ol>
-                {data.map(dish => (
-                    <li key={dish}>{dish['name']} - {dish['cuisine']}</li>
+                {data === "" ? <CircularProgress /> : 
+                <div>
+                  <Grid container alignItems="stretch" spacing={2}>
+                    {data.map((post) => (
+                      <Grid key={post.recipe_id} item xs={4} sm={3}>
+                        <RecipeReviewCard post={post}></RecipeReviewCard>
+                      </Grid>
                 ))}
-            </ol></div>}
+                </Grid>
+                  
+                </div>}
             </div>
             </span>
           </div>

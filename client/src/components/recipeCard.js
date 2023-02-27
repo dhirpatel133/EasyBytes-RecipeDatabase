@@ -26,7 +26,8 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const RecipeReviewCard = () => {
+const RecipeReviewCard = ({post}) => {
+  console.log(post)
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -38,7 +39,7 @@ const RecipeReviewCard = () => {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+            EB
           </Avatar>
         }
         action={
@@ -46,21 +47,38 @@ const RecipeReviewCard = () => {
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={post.dish_name}
+        subheader={post.date_created}
       />
       <CardMedia
         component="img"
         height="194"
-        //image="/static/images/cards/paella.jpg"
+        image={post.picture}
         alt="Paella dish"
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
+        <Typography variant="body2" color="black">
+          <strong>Cuisine:</strong> {post.cuisine}
         </Typography>
+        <Typography variant="body2" color="black">
+        <strong>Diet Labels:</strong> {post.health_label.replaceAll('|', ', ')}
+        </Typography>
+        <Typography variant="body2" color="black">
+        <strong>Meal Types:</strong> {post.meal_type.replaceAll('|', ', ')}
+        </Typography>
+        <Typography variant="body2" color="black">
+        <strong>Cook Time:</strong> {post.cook_time} mins
+        </Typography>
+        <Typography variant="body2" color="black">
+        <strong>Calories:</strong> {post.calories}
+        </Typography>
+        <Typography variant="body2" color="black">
+        <strong>Servings:</strong> {post.servings}
+        </Typography>
+        <Typography variant="body2" color="black">
+        <strong>Ingredients:</strong> {post.ingredients.replaceAll('|', ', ')}
+        </Typography>
+
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
