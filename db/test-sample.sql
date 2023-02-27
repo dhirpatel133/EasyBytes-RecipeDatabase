@@ -11,14 +11,14 @@ Feature (R7): Show all recipe posts
 Example: Post a Peanut Butter Sandwich
 */
 
-INSERT INTO recipes VALUE (120, 'Peanut Butter Sandwich', 'American', 5, 'peanut butter|bread', '1) Toast 2 slices of bread|2) Spread peanut butter on 1 side of 1 slice|3) Put the other slice on top of the slice of bread with peanut butter|4) Serve and enjoy', 50, 'breakfast', 'vegetarian', 30, 1, 'https://www.allrecipes.com/thmb/y6DLdlPjzMsKztstkBc8eE2DBik=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/9334336-4612d36a81f34f60a0191f7e470092b6.jpg');
-INSERT INTO posts VALUE (220, 120, 301, '2023-03-01 13:27:44', '2023-03-01 13:27:44');
+INSERT INTO recipes VALUES (120, 'Peanut Butter Sandwich', 'American', 5, 'peanut butter|bread', '1) Toast 2 slices of bread|2) Spread peanut butter on 1 side of 1 slice|3) Put the other slice on top of the slice of bread with peanut butter|4) Serve and enjoy', 50, 'breakfast', 'vegetarian', 30, 1, 'https://www.allrecipes.com/thmb/y6DLdlPjzMsKztstkBc8eE2DBik=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/9334336-4612d36a81f34f60a0191f7e470092b6.jpg');
+INSERT INTO posts VALUES (220, 120, 301, '2023-03-01 13:27:44', '2023-03-01 13:27:44');
 
 /* 
 Feature (R8): Create a new user (sign-up)
 */
 
-INSERT INTO users VALUE(305, 'john101', '$2y$10$1jVrIExJ1rPxlHHa98.ILeDdiL/H002HcRYQHpKasnlCOFxoTE8iq', 'John', 'Smith', null, null, null, null);
+INSERT INTO users VALUES (305, 'john101', '$2y$10$1jVrIExJ1rPxlHHa98.ILeDdiL/H002HcRYQHpKasnlCOFxoTE8iq', 'John', 'Smith', null, null, null, null);
 
 /* 
 Feature (R9): Login user by authenticating username and password and show user profile details
@@ -41,8 +41,7 @@ UPDATE recipes SET dish_name='lasagna', cuisine='italian', cook_time=45, ingredi
 Feature (R11): Delete Recipe Post posted by the current user
 */
 
-DELETE FROM posts WHERE post_id = 202;
-DELETE FROM Recipes WHERE recipe_id = 102;
+DELETE FROM recipes WHERE recipe_id = (SELECT recipe_id FROM posts WHERE post_id = 201);
 
 /* 
 Feature (R12): View recipes based on custom criteria
@@ -59,10 +58,10 @@ Feature (R18): Like Recipe Posts
 */
 
 -- User likes a post
-INSERT INTO likes VALUE (409, 204, 302, '2023-03-01 13:27:44');
+INSERT INTO likes VALUES (409, 204, 302, '2023-03-01 13:27:44');
 
 -- Display the number of likes for post 201:
-SELECT COUNT(*) AS like_count FROM likes where post_id = 201;
+SELECT COUNT(*) AS like_count FROM likes where post_id = 202;
 
 
 /* 
@@ -70,17 +69,17 @@ Feature (R19): Comment on Recipe Posts
 */
 
 -- User comments on a post
-INSERT INTO comments VALUE (509, 204, 302, 'This is a test', '2023-03-01 13:27:44');
+INSERT INTO comments VALUES (509, 204, 302, 'This is a test', '2023-03-01 13:27:44');
 
 -- Display all the comments for a post:
-SELECT user_id, content FROM comments where post_id = 201;
+SELECT user_id, content FROM comments where post_id = 204;
 
 /* 
 Feature (R20): Favourite Recipe Posts
 */
 
 -- User favourites a post
-INSERT INTO favourites VALUE (609, 204, 302, '2023-03-01 13:27:44');
+INSERT INTO favourites VALUES (609, 204, 302, '2023-03-01 13:27:44');
 
 -- Display all favourited posts for a user
 SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id JOIN favourites ON posts.post_id = favourites.post_id WHERE favourites.user_id = 301;
