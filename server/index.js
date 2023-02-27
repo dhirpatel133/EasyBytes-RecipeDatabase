@@ -13,7 +13,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: 'recipe_db',
   user: 'root',
-  password: 'mysqlroot' // replace this password with the password for you root user
+  password: 'root' // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -47,8 +47,6 @@ app.get('/getAllPosts', (req, res) => {
   );
 })
 
-// INSERT INTO recipes VALUE (recipe_id, name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, picture)
-
 app.get('/test', (req, res) => {
   //res.send('Backend: Hello World!')
   connection.query(
@@ -59,27 +57,42 @@ app.get('/test', (req, res) => {
   );
 })
 
-// http://localhost:5000/getCustomPosts?filterCategory=cuisine&filterValue=Italian
-// http://localhost:5000/getCustomPosts?sortCategory=calories&sortValue=desc
 app.get('/getCustomPosts', (req, res) => {
   
   let filterCategory = req.query.filterCategory
   let filterValue = req.query.filterValue
-  let sortCategory = req.query.sortCategory
   let sortValue = req.query.sortValue
-  let filterOnlyQuery = `SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE ${filterCategory} LIKE '%${filterValue}%'`
-  let sortOnlyQuery = `SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id ORDER BY ${sortCategory} ${sortValue}`
-  let filterAndSortQuery = `SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE ${filterCategory} LIKE '%${filterValue}%' ORDER BY ${sortCategory} ${sortValue}`
-  let finalQuery;
+  let baseQuery = "SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id"
+  let filterOnlyQuery = " WHERE "
+  let sortOnlyQuery = ` ORDER BY ${sortValue}`
+  //let filterAndSortQuery = `SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE ${filterCategory} LIKE '%${filterValue}%' ORDER BY ${sortCategory} ${sortValue}`
+  let finalQuery = baseQuery;
   
-  if (filterCategory && filterValue && sortCategory === undefined && sortValue === undefined) {
-    finalQuery = filterOnlyQuery
+  if (filterCategory && filterValue && sortValue === undefined) {
+    let filterCategories = filterCategory.split(',')
+    let filterValues = filterValue.split(',')
+    finalQuery += filterOnlyQuery
+    for (let i = 0; i < filterCategories.length; i++) {
+      finalQuery += `${filterCategories[i]} LIKE '%${filterValues[i]}%`
+      if (i != filterCategories.length - 1) {
+        finalQuery += " AND "
+      }
+    }
   }
-  else if (filterCategory === undefined && filterValue === undefined && sortCategory && sortValue) {
-    finalQuery = sortOnlyQuery
+  else if (filterCategory === undefined && filterValue === undefined && sortValue) {
+    finalQuery += sortOnlyQuery
   }
-  else if (filterCategory && filterValue && sortCategory && sortValue) {
-    finalQuery = filterAndSortQuery
+  else if (filterCategory && filterValue && sortValue) {
+    let filterCategories = filterCategory.split(',')
+    let filterValues = filterValue.split(',')
+    finalQuery += filterOnlyQuery
+    for (let i = 0; i < filterCategories.length; i++) {
+      finalQuery += `${filterCategories[i]} LIKE '%${filterValues[i]}%'`
+      if (i != filterCategories.length - 1) {
+        finalQuery += " AND "
+      }
+    }
+    finalQuery += sortOnlyQuery
   }
 
   connection.query(
@@ -88,9 +101,10 @@ app.get('/getCustomPosts', (req, res) => {
       res.send(results); // results contains rows returned by server
     }
   );
+
 })
 
-let currentTime = new Date()
+/*let currentTime = new Date()
 let mySQLTime = new Date(
   currentTime.getFullYear(),
   currentTime.getMonth(),
@@ -100,7 +114,6 @@ let mySQLTime = new Date(
   currentTime.getSeconds(),
   currentTime.getMilliseconds()
 ).toISOString().slice(0, 19).replace('T', ' ')
-
 app.get('/createPost', (req, res) => {
   // put error checking
   let recipeID = generateRandomUUID(120, 199);
@@ -115,15 +128,12 @@ app.get('/createPost', (req, res) => {
   let healthScore = req.query.healthScore
   let servings = req.query.servings
   let picture = req.query.picture
-
   let postID = generateRandomUUID(220, 299);
   let userID = req.query.userID
   let createdAt = mySQLTime
   let updatedAt = mySQLTime
-
   console.log(recipeID, postID)
   //console.log(createdAt, updatedAt)
-
   connection.query(
     `INSERT INTO recipes VALUE (${recipeID}, '${dishName}', '${cuisine}', ${cookTime}, '${ingredients}', '${instructions}', ${calories}, '${mealType}', '${healthLabel}', ${healthScore}, ${servings}, '${picture}');`,
     function(err, results, fields) {
@@ -137,7 +147,9 @@ app.get('/createPost', (req, res) => {
     }
   );
 })
+*/
 
+/*
 app.get('/deletePost', (req, res) => {
   
   let post_id = req.query.postid;
@@ -148,7 +160,7 @@ app.get('/deletePost', (req, res) => {
       res.send(results)
     }
   );
-})
+})*/
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
