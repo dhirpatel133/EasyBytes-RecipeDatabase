@@ -73,7 +73,7 @@ app.get('/getCustomPosts', (req, res) => {
     let filterValues = filterValue.split(',')
     finalQuery += filterOnlyQuery
     for (let i = 0; i < filterCategories.length; i++) {
-      finalQuery += `${filterCategories[i]} LIKE '%${filterValues[i]}%`
+      finalQuery += `${filterCategories[i]} LIKE '%${filterValues[i]}%'`
       if (i != filterCategories.length - 1) {
         finalQuery += " AND "
       }
