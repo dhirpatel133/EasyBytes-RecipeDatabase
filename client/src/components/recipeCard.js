@@ -10,10 +10,18 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import CommentIcon from '@mui/icons-material/Comment';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ScrollBar from 'react-custom-scrollbars'
+
+function getFormattedDate(date) {
+  let t = date.split(/[- :]/);
+  let s = t[0] + '-' + t[1] + '-' + t[3]
+  var d = new Date(s)
+  return d.toDateString()
+}
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -35,7 +43,7 @@ const RecipeReviewCard = ({post}) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 500 }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -43,20 +51,22 @@ const RecipeReviewCard = ({post}) => {
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
+          <IconButton aria-label="favourite">
+          <BookmarkIcon />
           </IconButton>
         }
         title={post.dish_name}
-        subheader={post.date_created}
+        subheader={getFormattedDate(post.date_created)}
       />
       <CardMedia
         component="img"
-        height="194"
+        height="300"
+        width="300"
         image={post.picture}
-        alt="Paella dish"
+        justifyContent="center"
       />
       <CardContent>
+        <ScrollBar style={{height: 300}}>
         <Typography variant="body2" color="black">
           <strong>Cuisine:</strong> {post.cuisine}
         </Typography>
@@ -78,14 +88,14 @@ const RecipeReviewCard = ({post}) => {
         <Typography variant="body2" color="black">
         <strong>Ingredients:</strong> {post.ingredients.replaceAll('|', ', ')}
         </Typography>
-
+        </ScrollBar>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton aria-label="like post">
+          <ThumbUpIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+        <IconButton aria-label="comment on post">
+          <CommentIcon />
         </IconButton>
         <ExpandMore
           expand={expanded}
@@ -98,31 +108,10 @@ const RecipeReviewCard = ({post}) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-            aside for 10 minutes.
-          </Typography>
-          <Typography paragraph>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-            medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
-            occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
-            large plate and set aside, leaving chicken and chorizo in the pan. Add
-            pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
-            stirring often until thickened and fragrant, about 10 minutes. Add
-            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-            Add rice and stir very gently to distribute. Top with artichokes and
-            peppers, and cook without stirring, until most of the liquid is absorbed,
-            15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-            mussels, tucking them down into the rice, and cook again without
-            stirring, until mussels have opened and rice is just tender, 5 to 7
-            minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography>
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography>
+          <Typography paragraph>Instructions:</Typography>
+          {post.instructions.split('|').map((instruction) => (
+            <Typography paragraph>{instruction}</Typography>
+          ))}
         </CardContent>
       </Collapse>
     </Card>

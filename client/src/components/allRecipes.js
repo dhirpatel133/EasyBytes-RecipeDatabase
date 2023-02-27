@@ -1,50 +1,38 @@
 import React, {useState, useEffect} from 'react';
 import { CircularProgress, Grid } from '@mui/material';
+import RecipeReviewCard from './recipeCard';
 
-const AllRecipes = () => {
-
+const AllRecipes = (test) => {
+    // iif goes here
     let url = 'http://localhost:5000/getAllPosts'; 
-
-    const [postData, setData] = useState("");
-    
+    const [data, setData] = useState("");
+  
     const getData = async (event) => {
-        const res = await fetch(url);    
-        const data = await res.json();
-        const outputData = data;
-        setData(outputData);
-        console.log(postData)
+      const res = await fetch(url);    
+      const data = await res.json();
+      console.log(data);
+      const outputData = data;
+      setData(outputData);
     };
+
+    getData();
     
-    return(
-        <div className='cards'>
-            <button onClick={getData}>Get Data</button>
-
+    return (
+      <div className="App" style={{padding: 10}}>
+        <div>
+            {data === "" ? <CircularProgress /> : 
             <div>
-                postData === "" ? <CircularProgress /> : (
-                    <Grid container alignItems="stretch" spacing={3}>
-                {postData.map((post) => (
-                    <Grid key={post.recipe_id} item xs={12} sm={6}>
-                        <h1>post.dish_name</h1>
-                    </Grid>
-                ))}
+              <Grid container alignItems="stretch" spacing={2}>
+                {data.map((post) => (
+                  <Grid key={post.recipe_id} item xs={4} sm={3}>
+                    <RecipeReviewCard post={post}></RecipeReviewCard>
+                  </Grid>
+            ))}
             </Grid>
-
-                )
-            </div>
-
-            
-            
+              
+            </div>}
         </div>
-        
-        // !posts.length ? <CircularProgress /> : (
-        //     <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-        //         {posts.map((post) => (
-        //             <Grid key={post._id} item xs={12} sm={6}>
-        //                 <Post post={post} setCurrentId={setCurrentId} />
-        //             </Grid>
-        //         ))}
-        //     </Grid>
-        // )
+      </div>
     );
 }
 
