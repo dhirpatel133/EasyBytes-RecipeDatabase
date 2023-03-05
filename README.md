@@ -80,6 +80,8 @@ To run the backend:
 - The backend service will run on port 5000
 - Once the backend has started, it will spin up a local connection with MySQL which will run on port 3306 and will populate the db with all the sample data.
 
+Note: You need to have both the frontend and backend running simultaneously
+
 # Features currently supported by Application
 - Show all recipe posts
 - View recipes based on custom criteria
