@@ -4,10 +4,10 @@
 Feature (R6): Show all recipe posts
 */
 
-SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id;
+SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id LEFT OUTER JOIN users ON posts.user_id = users.user_id;
 
 /* 
-Feature (R7): Show all recipe posts
+Feature (R7): Create new recipe posts
 Example: Post a Peanut Butter Sandwich
 */
 
@@ -31,14 +31,14 @@ SELECT user_id FROM users WHERE users.user_name = 'guneet_21' AND users.user_pas
 SELECT * FROM users WHERE users.user_id = 303;
 
 /* 
-Feature (R10): Update Recipe Post posted by the current users
+Feature (R10): Update Recipe post posted by the current users
 */
 
 UPDATE posts SET date_modified='2023-03-01 13:27:44' WHERE post_id = 202;
 UPDATE recipes SET dish_name='lasagna', cuisine='italian', cook_time=45, ingredients='cheese|pasta|gravy', instructions='step1|step2|step3' WHERE recipe_id = 102;
 
 /* 
-Feature (R11): Delete Recipe Post posted by the current user
+Feature (R11): Delete Recipe post posted by the current user
 */
 
 DELETE FROM recipes WHERE recipe_id = (SELECT recipe_id FROM posts WHERE post_id = 201);
@@ -47,11 +47,11 @@ DELETE FROM recipes WHERE recipe_id = (SELECT recipe_id FROM posts WHERE post_id
 Feature (R12): View recipes based on custom criteria
 */
 
-SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE health_label LIKE '%vegan%';
+SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id LEFT OUTER JOIN users ON posts.user_id = users.user_id WHERE health_label LIKE '%vegan%';
 
-SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id ORDER BY cook_time ASC;
+SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id LEFT OUTER JOIN users ON posts.user_id = users.user_id ORDER BY cook_time ASC;
 
-SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE cuisine LIKE '%Italian%' ORDER BY calories DESC;
+SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id LEFT OUTER JOIN users ON posts.user_id = users.user_id WHERE cuisine LIKE '%Italian%' ORDER BY calories DESC;
 
 /* 
 Feature (R18): Like Recipe Posts

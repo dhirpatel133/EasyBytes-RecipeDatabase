@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 app.get('/getAllPosts', (req, res) => {
   //res.send('Backend: Hello World!')
   connection.query(
-    'SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id',
+    'SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id LEFT OUTER JOIN users ON posts.user_id = users.user_id;',
     function(err, results) {
       res.send(results); // results contains rows returned by server
     }
@@ -62,7 +62,7 @@ app.get('/getCustomPosts', (req, res) => {
   let filterCategory = req.query.filterCategory
   let filterValue = req.query.filterValue
   let sortValue = req.query.sortValue
-  let baseQuery = "SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id"
+  let baseQuery = "SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id LEFT OUTER JOIN users ON posts.user_id = users.user_id"
   let filterOnlyQuery = " WHERE "
   let sortOnlyQuery = ` ORDER BY ${sortValue}`
   //let filterAndSortQuery = `SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE ${filterCategory} LIKE '%${filterValue}%' ORDER BY ${sortCategory} ${sortValue}`
@@ -94,7 +94,6 @@ app.get('/getCustomPosts', (req, res) => {
     }
     finalQuery += sortOnlyQuery
   }
-  console.log(finalQuery)
 
   connection.query(
     finalQuery,
@@ -105,7 +104,7 @@ app.get('/getCustomPosts', (req, res) => {
 
 })
 
-/*let currentTime = new Date()
+let currentTime = new Date()
 let mySQLTime = new Date(
   currentTime.getFullYear(),
   currentTime.getMonth(),
@@ -115,6 +114,7 @@ let mySQLTime = new Date(
   currentTime.getSeconds(),
   currentTime.getMilliseconds()
 ).toISOString().slice(0, 19).replace('T', ' ')
+
 app.get('/createPost', (req, res) => {
   // put error checking
   let recipeID = generateRandomUUID(120, 199);
@@ -148,9 +148,9 @@ app.get('/createPost', (req, res) => {
     }
   );
 })
-*/
 
-/*
+
+
 app.get('/deletePost', (req, res) => {
   
   let post_id = req.query.postid;
@@ -161,7 +161,7 @@ app.get('/deletePost', (req, res) => {
       res.send(results)
     }
   );
-})*/
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

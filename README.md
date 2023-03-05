@@ -31,10 +31,6 @@ We wil be using a mySQL database.
 
 ```USE recipe_db;```
 
-5) Grant the root user all privileges to the recipe_db
-
-```GRANT ALL PRIVILEGES ON recipe_db . * TO 'root'@'localhost';```
-
 ## Populate database with sample data
 
 The backend connects to the local instance of your MySQL server using the following code:

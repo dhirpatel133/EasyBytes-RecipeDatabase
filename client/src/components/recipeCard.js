@@ -47,7 +47,7 @@ const RecipeReviewCard = ({post}) => {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            EB
+            {post.first_name !== null ? post.first_name[0] + post.last_name[0] : "EB"}
           </Avatar>
         }
         action={
@@ -62,7 +62,7 @@ const RecipeReviewCard = ({post}) => {
         component="img"
         height="300"
         width="300"
-        image={post.picture}
+        image={post.recipe_picture}
         justifyContent="center"
       />
       <CardContent>
