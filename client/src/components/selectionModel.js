@@ -100,7 +100,7 @@ const SelectionModel = (props) => {
     <div style={{padding: 10}}>
     <Stack direction="row" spacing={2}>
         <div>
-        <FormControl sx={{ m: 1, width: 400 }}>
+        <FormControl sx={{ m: 1, width: 285 }}>
         <InputLabel id="cuisine">Cuisine</InputLabel>
         <Select
           labelId="cuisine"
@@ -118,7 +118,7 @@ const SelectionModel = (props) => {
         </Select>
       </FormControl>
 
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: 285 }}>
         <InputLabel id="meal-type">Meal Type</InputLabel>
         <Select
           labelId="meal-type"
@@ -136,7 +136,7 @@ const SelectionModel = (props) => {
         </Select>
       </FormControl>
 
-      <FormControl sx={{ m: 1, width: 400 }}>
+      <FormControl sx={{ m: 1, width: 285 }}>
         <InputLabel id="diet-label">Diet Label</InputLabel>
         <Select
           labelId="diet-label"
@@ -154,7 +154,7 @@ const SelectionModel = (props) => {
         </Select>
       </FormControl>
 
-      <FormControl sx={{ m: 1, width: 375 }}>
+      <FormControl sx={{ m: 1, width: 285 }}>
         <InputLabel id="sort-categories">Sort Categories</InputLabel>
         <Select
           labelId="sort-categories"
@@ -171,7 +171,7 @@ const SelectionModel = (props) => {
           ))}
         </Select>
       </FormControl>
-      <Button variant="contained" style={{height: 55, width: 200}} onClick={() => {props.sendToParent({"cuisine": cuisine, "meal_type": meal, "diet_label": diet, "sort": sort})}}>Search for Recipes</Button>
+      <Button variant="contained" style={{height: 75, width: 200}} onClick={() => {props.sendToParent({"cuisine": cuisine, "meal_type": meal, "diet_label": diet, "sort": sort})}}>Search for Recipes</Button>
         </div>
     </Stack>
     </div>
