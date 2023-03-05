@@ -4,10 +4,6 @@ import cors from 'cors';
 
 //Bcrypt
 
-function generateRandomUUID(min, max) { // min and max included 
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
 const connection = mysql2.createConnection({
   host: 'localhost',
   port: 3306,
@@ -117,7 +113,6 @@ let mySQLTime = new Date(
 
 app.get('/createPost', (req, res) => {
   // put error checking
-  let recipeID = generateRandomUUID(120, 199);
   let dishName = req.query.dishName
   let cuisine = req.query.cuisine
   let cookTime = req.query.cookTime
@@ -129,17 +124,16 @@ app.get('/createPost', (req, res) => {
   let healthScore = req.query.healthScore
   let servings = req.query.servings
   let picture = req.query.picture
-  let postID = generateRandomUUID(220, 299);
   let userID = req.query.userID
   let createdAt = mySQLTime
   let updatedAt = mySQLTime
   console.log(recipeID, postID)
   //console.log(createdAt, updatedAt)
   connection.query(
-    `INSERT INTO recipes VALUE (${recipeID}, '${dishName}', '${cuisine}', ${cookTime}, '${ingredients}', '${instructions}', ${calories}, '${mealType}', '${healthLabel}', ${healthScore}, ${servings}, '${picture}');`,
+    `INSERT INTO recipes(name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture) VALUE ('${dishName}', '${cuisine}', ${cookTime}, '${ingredients}', '${instructions}', ${calories}, '${mealType}', '${healthLabel}', ${healthScore}, ${servings}, '${picture}');`,
     function(err, results, fields) {
       connection.query(
-        `INSERT INTO posts VALUE (${postID}, ${recipeID}, ${userID}, '${createdAt}', '${updatedAt}');`,
+        `INSERT INTO posts(recipe_id, user_id, created_date, modified_date) VALUE (${recipeID}, ${userID}, '${createdAt}', '${updatedAt}');`,
         function(err, results, fields) {
           console.log(results)
           res.send(results)
@@ -148,8 +142,6 @@ app.get('/createPost', (req, res) => {
     }
   );
 })
-
-
 
 app.get('/deletePost', (req, res) => {
   
