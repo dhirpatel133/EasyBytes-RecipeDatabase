@@ -83,5 +83,5 @@ To run the backend:
 Note: You need to have both the frontend and backend running simultaneously
 
 # Features currently supported by Application
-- Show all recipe posts
-- View recipes based on custom criteria
+- R6: Show all recipe posts
+- R12: View recipes based on custom criteria
