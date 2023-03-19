@@ -8,7 +8,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: "recipe_db",
   user: "root",
-  password: "mysqlroot", // replace this password with the password for you root user
+  password: "root", // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -35,26 +35,26 @@ app.get("/", (req, res) => {
 app.get("/getAllPosts", (req, res) => {
   //res.send('Backend: Hello World!')
   connection.query(
-    "SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id LEFT OUTER JOIN users ON posts.user_id = users.user_id;",
+    "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id;",
     function (err, results) {
       res.send(results); // results contains rows returned by server
     }
   );
 });
 
-app.get("/test", (req, res) => {
+/*app.get("/test", (req, res) => {
   //res.send('Backend: Hello World!')
   connection.query("SHOW tables", function (err, results) {
     res.send(results); // results contains rows returned by server
   });
-});
+});*/
 
 app.get("/getCustomPosts", (req, res) => {
   let filterCategory = req.query.filterCategory;
   let filterValue = req.query.filterValue;
   let sortValue = req.query.sortValue;
   let baseQuery =
-    "SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id LEFT OUTER JOIN users ON posts.user_id = users.user_id";
+    "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id";
   let filterOnlyQuery = " WHERE ";
   let sortOnlyQuery = ` ORDER BY ${sortValue}`;
   //let filterAndSortQuery = `SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE ${filterCategory} LIKE '%${filterValue}%' ORDER BY ${sortCategory} ${sortValue}`
@@ -110,6 +110,7 @@ let mySQLTime = new Date(
 
 app.get("/createPost", (req, res) => {
   // put error checking
+  // remove double query
   let dishName = req.query.dishName;
   let cuisine = req.query.cuisine;
   let cookTime = req.query.cookTime;
@@ -141,6 +142,7 @@ app.get("/createPost", (req, res) => {
 });
 
 app.get("/deletePost", (req, res) => {
+  // fix query
   let post_id = req.query.postid;
 
   connection.query(

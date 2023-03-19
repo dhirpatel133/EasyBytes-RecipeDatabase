@@ -9,7 +9,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: 'recipe_db',
   user: 'root',
-  password: 'mysqlroot' // replace this password with the password for you root user
+  password: 'root' // replace this password with the password for you root user
 });
 
 function deleteTables() {
@@ -53,19 +53,11 @@ function populateRecipes() {
     .pipe(parse({ delimiter: ",", from_line: 2 }))
     .on("data", function (row) { 
       connection.query(
-        `INSERT INTO recipes VALUES (${parseInt(row[0])}, '${row[1]}', '${row[2]}', ${parseInt(row[3])}, '${row[4]}', '${row[5]}', ${parseInt(row[6])}, '${row[7]}', '${row[8]}', ${parseInt(row[9])}, ${parseInt(row[10])}, '${row[11]}')`,
+        `INSERT INTO recipes VALUES (${parseInt(row[0])}, ${parseInt(row[1])}, '${row[2]}', '${row[3]}', '${parseInt(row[4])}', '${row[5]}', '${row[6]}', '${parseInt(row[7])}', '${row[8]}', '${row[9]}', ${parseInt(row[10])}, ${parseInt(row[11])}, '${row[12]}', '${row[13]}', '${row[14]}')`,
       );
     })
 }
-function populatePosts() {
-  fs.createReadStream("../db/sample-data/post-sample.csv")
-    .pipe(parse({ delimiter: ",", from_line: 2 }))
-    .on("data", function (row) { 
-      connection.query(
-        `INSERT INTO posts VALUES (${parseInt(row[0])}, ${parseInt(row[2])}, ${isNaN(parseInt(row[1])) ? null : parseInt(row[1])}, '${row[3]}', '${row[4]}')`,
-      );
-    })
-}
+
 function populateLikes() {
   fs.createReadStream("../db/sample-data/like-sample.csv")
     .pipe(parse({ delimiter: ",", from_line: 2 }))
@@ -107,19 +99,16 @@ setTimeout(function() {
   populateRecipes();
 }, 1000)
 
-setTimeout(function() {
-  populatePosts();
-}, 1500)
 
 setTimeout(function() {
   populateLikes();
-}, 2000)
+}, 1500)
 
 setTimeout(function() {
   populateComments();
-}, 2500)
+}, 2000)
 
 setTimeout(function() {
   populateFavourites();
   console.log("Populated tables with sample data!")
-}, 3000)
+}, 2500)
