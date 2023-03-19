@@ -1,26 +1,33 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios'
-import SelectionModel from './components/selectionModel';
-import AllRecipes from './components/allRecipes';
-import { padding, style } from '@mui/system';
-import MainNavBar from './components/mainNavbar';
+import { AccountBox } from "./components/accountBox";
+import styled from "styled-components";
+import { Routes, Route } from "react-router-dom";
+import Home from "./components/homePage";
+import MyRecipes from "./components/myRecipes";
 
-
-let url = 'http://localhost:5000/'; 
-
+const AppContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 
 const App = () => {
-  const [data, setData] = useState({"cuisine": '', "meal_type": '', "diet_label": '', "sort": ''});
   return (
-    <div className="App">
-      <header><MainNavBar/></header>
-      <SelectionModel style={{padding: 300}} toChild={data} sendToParent={setData}></SelectionModel>
-      <div>
-          <AllRecipes search={data}></AllRecipes>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/home" element={<Home />} />
+      <Route
+        path="/"
+        element={
+          <AppContainer>
+            <AccountBox />
+          </AppContainer>
+        }
+      />
+      <Route path="/myRecipes" element={<MyRecipes />} />
+    </Routes>
   );
-
-}
+};
 
 export default App;
