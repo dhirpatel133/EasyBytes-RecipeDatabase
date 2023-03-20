@@ -12,9 +12,7 @@ This repo contains the initial set up of the database project "EasyBytes" for CS
 - Richa Dalal
 - Soham Shah
 
-# How to create and load the sample database
-
-## Create a local instance of the database
+# Create a local instance of the database
 
 We wil be using a mySQL database.
 
@@ -31,6 +29,12 @@ We wil be using a mySQL database.
 
 ```USE recipe_db;```
 
+# How to create sample database and load sample data
+
+## Create local instance of recipe_db:
+
+**IMPORTANT:** Follow the instructions under the "Create a local instance of the database" section to get a local instance running before moving to the "Populate database with sample data" section
+
 ## Populate database with sample data
 
 The backend connects to the local instance of your MySQL server using the following code:
@@ -46,7 +50,7 @@ const connection = mysql2.createConnection({
 ```
 Note: You need to replace the password and user in the connection object above with the password and username you have set on your local machine
 
-There is a file under the server folder named populate-db-sample-data.js which will use the createtables.sql file to create the required tables as well as populate the tables with the sample data which can be found [here](./db/sample-data)
+There is a file under the server folder named **populate-db-sample-data.js** which will use the createsampletables.sql file to create the required tables as well as populate the tables with the sample data which can be found [here](./db/sample-data)
 
 To populate the tables with sample data, run the following commands:
 
@@ -58,10 +62,42 @@ node populate-db-sample-data.js
 
 Once, you see the following output on the console ```Populated tables with sample data!```,  run the command, ```Ctrl + C``` to end the process
 
-# How to create and load the production database
+# How to create production database and load production data
 
-Recipe data will be retrieved from https://spoonacular.com/ using a GET request\
-There will be a Python script that gets the data, formats it and pushes to the desired table in the database
+Recipe data was retrieved from https://spoonacular.com/ API using GET requests
+
+Refer to **ApiDataParser.py** to review how production data was retrieved, cleaned and imported into the recipes.csv file
+
+## Create local instance of recipe_db:
+
+**IMPORTANT:** Follow the instructions under the "Create a local instance of the database" section to get a local instance running before moving to the "Populate database with production data" section
+
+## Populate database with production data
+
+The backend connects to the local instance of your MySQL server using the following code:
+
+```
+const connection = mysql2.createConnection({
+  host: 'localhost',
+  port: 3306,
+  database: 'recipe_db',
+  user: 'root',
+  password: 'root'
+});
+```
+Note: You need to replace the password and user in the connection object above with the password and username you have set on your local machine
+
+There is a file under the server folder named **populate-db-production-data.js** which will use the createproductiontables.sql file to create the required tables and views as well as populate the tables with the production data which can be found [here](./db/production-data)
+
+To populate the tables with production data, run the following commands:
+
+```
+cd server
+npm i
+node populate-db-production-data.js
+```
+
+Once, you see the following output on the console ```Populated tables with sample data!```,  run the command, ```Ctrl + C``` to end the process
 
 # How to run the Frontend and Backend
 
@@ -76,12 +112,18 @@ To run the backend:
 - First, clone the entire repo in an IDE of your choice in your local computer.
 - Then, open the terminal and navigate to the server/ directory. ```cd server```
 - Download all the neccessary dependencies using the following command: ```npm i```
+- Before running the backend, ensure to have completed the steps to either populate the sample or production database
 - In the terminal, type the following command to startup the backend: ```npm start```
 - The backend service will run on port 5000
-- Once the backend has started, it will spin up a local connection with MySQL which will run on port 3306 and will populate the db with all the sample data.
+- Once the backend has started, it will spin up a local connection with MySQL which will run on port 3306
 
 Note: You need to have both the frontend and backend running simultaneously
 
 # Features currently supported by Application
 - R6: Show all recipe posts
-- R12: View recipes based on custom criteria
+- R7: Create a new recipe
+- R8: View recipes based on custom criteria
+- R9: User login and show user profile
+- R10: Update a recipe made by user
+- R11: Delete a recipe made by user
+- Additional feature - R18: User Registration
