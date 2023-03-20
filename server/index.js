@@ -20,8 +20,6 @@ connection.connect(function (err) {
   }
 });
 
-//populateTables(connection);
-
 const app = express();
 const port = 5000;
 
@@ -33,9 +31,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getAllPosts", (req, res) => {
-  //res.send('Backend: Hello World!')
   connection.query(
-    "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id;",
+    "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id LIMIT 30;",
     function (err, results) {
       res.send(results); // results contains rows returned by server
     }
@@ -43,7 +40,6 @@ app.get("/getAllPosts", (req, res) => {
 });
 
 app.get("/getUserPosts", (req, res) => {
-  //res.send('Backend: Hello World!')
   let user_id = req.query.user_id;
   connection.query(
     `SELECT * FROM recipes WHERE recipes.user_id = ${user_id};`,
@@ -52,13 +48,6 @@ app.get("/getUserPosts", (req, res) => {
     }
   );
 });
-
-/*app.get("/test", (req, res) => {
-  //res.send('Backend: Hello World!')
-  connection.query("SHOW tables", function (err, results) {
-    res.send(results); // results contains rows returned by server
-  });
-});*/
 
 app.get("/getCustomPosts", (req, res) => {
   let filterCategory = req.query.filterCategory;
@@ -105,17 +94,6 @@ app.get("/getCustomPosts", (req, res) => {
   });
 });
 
-let currentTime = new Date();
-let mySQLTime = new Date(
-  currentTime.getFullYear(),
-  currentTime.getMonth(),
-  currentTime.getDate(),
-  currentTime.getHours() - currentTime.getTimezoneOffset() / 60,
-  currentTime.getMinutes(),
-  currentTime.getSeconds(),
-  currentTime.getMilliseconds()
-).toISOString().slice(0, 19).replace("T", " ");
-
 app.post("/createPost", (req, res) => {
   // put error checking
   let dishName = req.body.recipeName;
@@ -130,10 +108,8 @@ app.post("/createPost", (req, res) => {
   let servings = req.body.servings;
   let picture = req.body.recipePicture;
   let userID = req.body.userID;
-  let createdAt = mySQLTime;
-  let updatedAt = mySQLTime;
-  let insertRecipe = `INSERT INTO recipes (user_id, dish_name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture, date_created, date_modified)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  let insertRecipe = `INSERT INTO recipes (user_id, dish_name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
   connection.query(
     insertRecipe,
     [
@@ -148,9 +124,7 @@ app.post("/createPost", (req, res) => {
       healthLabel,
       healthScore,
       servings,
-      picture,
-      createdAt,
-      updatedAt,
+      picture
     ],
     (err, result, fields) => {
       if (err) {
@@ -164,7 +138,6 @@ app.post("/createPost", (req, res) => {
 });
 
 app.put("/updatePost", (req, res) => {
-  // put error checking
   let dishName = req.body.recipeName;
   let cuisine = req.body.cuisine;
   let cookTime = req.body.cookTime;
@@ -177,8 +150,7 @@ app.put("/updatePost", (req, res) => {
   let servings = req.body.servings;
   let picture = req.body.recipePicture;
   let recipeID = req.body.recipeID;
-  let updatedAt = mySQLTime;
-  let updateRecipe = `UPDATE recipes SET dish_name='${dishName}', cuisine='${cuisine}', cook_time=${cookTime}, ingredients='${ingredients}', instructions='${instructions}', calories=${calories}, meal_type='${mealType}', health_label='${healthLabel}', health_score=${healthScore}, servings=${servings}, recipe_picture='${picture}', date_modified='${updatedAt}' WHERE recipe_id=${recipeID};`
+  let updateRecipe = `UPDATE recipes SET dish_name='${dishName}', cuisine='${cuisine}', cook_time=${cookTime}, ingredients='${ingredients}', instructions='${instructions}', calories=${calories}, meal_type='${mealType}', health_label='${healthLabel}', health_score=${healthScore}, servings=${servings}, recipe_picture='${picture}' WHERE recipe_id=${recipeID};`
   connection.query(
     updateRecipe,
     (err, result, fields) => {
@@ -193,7 +165,6 @@ app.put("/updatePost", (req, res) => {
 });
 
 app.delete("/deleteRecipes", (req, res) => {
-  // fix query
   let recipe_id = req.query.recipe_id;
 
   connection.query(

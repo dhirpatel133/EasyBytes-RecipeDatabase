@@ -19,7 +19,7 @@ import Axios from "axios";
 import IndividualRecipeCard from './individualRecipe';
 
 function getFormattedDate(date) {
-  return date.substring(0,10)
+  return date.substring(0,19).replace('T', ' ')
 }
 function deleteRecipe(recipe_id) {
     console.log(recipe_id)
@@ -66,6 +66,7 @@ const UserRecipeCard = ({post}) => {
         }
           
         title={post.dish_name}
+        titleTypographyProps={{variant:'subtitle2' }}
         subheader={getFormattedDate(post.date_modified)}
       />
       <CardMedia

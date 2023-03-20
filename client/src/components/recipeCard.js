@@ -17,7 +17,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ScrollBar from 'react-custom-scrollbars'
 
 function getFormattedDate(date) {
-  return date.substring(0,10)
+  return date.substring(0,19).replace('T', ' ')
 }
 
 const ExpandMore = styled((props) => {
@@ -52,6 +52,7 @@ const RecipeReviewCard = ({post}) => {
           </IconButton>
         }
         title={post.dish_name}
+        titleTypographyProps={{variant:'subtitle2' }}
         subheader={getFormattedDate(post.date_modified)}
       />
       <CardMedia
