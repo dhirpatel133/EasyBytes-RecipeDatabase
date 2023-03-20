@@ -8,7 +8,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: "recipe_db",
   user: "root",
-  password: "root", // replace this password with the password for you root user
+  password: "mysqlroot", // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -110,8 +110,7 @@ let mySQLTime = new Date(
 
 app.post("/createPost", (req, res) => {
   // put error checking
-  // remove double query
-  let dishName = req.body.dishName;
+  let dishName = req.body.recipeName;
   let cuisine = req.body.cuisine;
   let cookTime = req.body.cookTime;
   let ingredients = req.body.ingredients;
@@ -121,15 +120,37 @@ app.post("/createPost", (req, res) => {
   let healthLabel = req.body.healthLabel;
   let healthScore = req.body.healthScore;
   let servings = req.body.servings;
-  let picture = req.body.picture;
+  let picture = req.body.recipePicture;
   let userID = req.body.userID;
   let createdAt = mySQLTime;
   let updatedAt = mySQLTime;
-  console.log(createdAt, updatedAt);
+  let insertRecipe = `INSERT INTO recipes (user_id, dish_name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture, date_created, date_modified)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
   connection.query(
-    `INSERT INTO recipes(user_id, name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture, created_date, modified_date) VALUE (${userID}, '${dishName}', '${cuisine}', ${cookTime}, '${ingredients}', '${instructions}', ${calories}, '${mealType}', '${healthLabel}', ${healthScore}, ${servings}, '${picture}', '${createdAt}', '${updatedAt}');`,
-    function (err, results, fields) {
-      res.send(results);
+    insertRecipe,
+    [
+      userID,
+      dishName,
+      cuisine,
+      cookTime,
+      ingredients,
+      instructions,
+      calories,
+      mealType,
+      healthLabel,
+      healthScore,
+      servings,
+      picture,
+      createdAt,
+      updatedAt,
+    ],
+    (err, result, fields) => {
+      if (err) {
+        console.log(err);
+        res.send("invalid");
+      } else {
+        res.send("valid");
+      }
     }
   );
 });

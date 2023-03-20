@@ -9,7 +9,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: 'recipe_db',
   user: 'root',
-  password: 'root' // replace this password with the password for you root user
+  password: 'mysqlroot' // replace this password with the password for you root user
 });
 
 function deleteTables() {

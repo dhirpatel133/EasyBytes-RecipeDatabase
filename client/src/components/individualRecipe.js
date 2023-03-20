@@ -1,31 +1,41 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { TextField } from '@mui/material';
-import { Box } from '@mui/material';
-import { useState } from 'react';
+import { TextField } from "@mui/material";
+import { Box } from "@mui/material";
+import { useState } from "react";
 import Axios from "axios";
+import Swal from "sweetalert2";
 
 export default function IndividualRecipeCard(props) {
-
   const navigate = useNavigate();
 
   const [recipeName, setRecipeName] = useState(props.recipeData["recipe_name"]);
   const [cuisineName, setCuisineName] = useState(props.recipeData["cuisine"]);
   const [cookTime, setCookTime] = useState(props.recipeData["cook_time"]);
-  const [ingredients, setIngredients] = useState(props.recipeData["ingredients"]);
-  const [instructions, setInstructions] = useState(props.recipeData["instructions"]);
+  const [ingredients, setIngredients] = useState(
+    props.recipeData["ingredients"]
+  );
+  const [instructions, setInstructions] = useState(
+    props.recipeData["instructions"]
+  );
   const [calories, setCalories] = useState(props.recipeData["calories"]);
   const [mealType, setMealType] = useState(props.recipeData["meal_type"]);
-  const [healthLabel, setHealthLabel] = useState(props.recipeData["health_label"]);
-  const [healthScore, setHealthScore] = useState(props.recipeData["health_score"]);
+  const [healthLabel, setHealthLabel] = useState(
+    props.recipeData["health_label"]
+  );
+  const [healthScore, setHealthScore] = useState(
+    props.recipeData["health_score"]
+  );
   const [servings, setServings] = useState(props.recipeData["servings"]);
-  const [recipePicture, setRecipePicture] = useState(props.recipeData["recipe_picture"]);
+  const [recipePicture, setRecipePicture] = useState(
+    props.recipeData["recipe_picture"]
+  );
 
   useEffect(() => {
     if (!sessionStorage.getItem("authenticated")) {
@@ -33,11 +43,20 @@ export default function IndividualRecipeCard(props) {
     }
   }, []);
 
+  const alertError = (message, errIcon) => {
+    Swal.fire({
+      position: "top",
+      icon: errIcon,
+      title: message,
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
 
   const updateRecipe = () => {
     if (props.newPost) {
       props.toggleShow();
-      Axios.post("http://localhost:5000/updateUserData", {
+      Axios.post("http://localhost:5000/createPost", {
         userID: sessionStorage.getItem("authenticated"),
         recipeName: recipeName,
         cuisine: cuisineName,
@@ -49,9 +68,21 @@ export default function IndividualRecipeCard(props) {
         healthLabel: healthLabel,
         healthScore: healthScore,
         servings: servings,
-        recipePicture: recipePicture
-      }
-      )
+        recipePicture: recipePicture,
+      }).then((response) => {
+        // console.log(response.data[0]["user_id"]);
+        if (response.data === "invalid") {
+          props.toggleShow();
+          let message = "Failed to create recipe.";
+          let errIcon = "error";
+          alertError(message, errIcon);
+        } else {
+          props.toggleShow();
+          let message = "Recipe successfully created!";
+          let errIcon = "success";
+          alertError(message, errIcon);
+        }
+      });
     }
   };
 
@@ -60,7 +91,7 @@ export default function IndividualRecipeCard(props) {
       <Dialog onClose={props.toggleShow} open={props.show}>
         <DialogTitle>Create New Recipe</DialogTitle>
         <DialogContent dividers>
-        <Box
+          <Box
             component="form"
             marginTop={"2ch"}
             sx={{ display: "flex", flexWrap: "wrap" }}
@@ -74,9 +105,7 @@ export default function IndividualRecipeCard(props) {
                 id="name"
                 label="Recipe Name"
                 //defaultValue={props.userData["first_name"]}
-                onChange={(e) =>
-                  setRecipeName(e.target.value)
-                }
+                onChange={(e) => setRecipeName(e.target.value)}
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
               />
@@ -86,9 +115,7 @@ export default function IndividualRecipeCard(props) {
                 margin="normal"
                 id="name"
                 //defaultValue={props.userData["last_name"]}
-                onChange={(e) =>
-                  setCuisineName(e.target.value)
-                }
+                onChange={(e) => setCuisineName(e.target.value)}
                 label="Cuisine"
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
@@ -100,9 +127,7 @@ export default function IndividualRecipeCard(props) {
                 id="name"
                 label="Cook Time"
                 //defaultValue={props.userData["first_name"]}
-                onChange={(e) =>
-                  setCookTime(e.target.value)
-                }
+                onChange={(e) => setCookTime(e.target.value)}
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
               />
@@ -112,9 +137,7 @@ export default function IndividualRecipeCard(props) {
                 margin="normal"
                 id="name"
                 //defaultValue={props.userData["last_name"]}
-                onChange={(e) =>
-                  setCalories(e.target.value)
-                }
+                onChange={(e) => setCalories(e.target.value)}
                 label="Calories"
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
@@ -126,9 +149,7 @@ export default function IndividualRecipeCard(props) {
                 multiline
                 rows={2}
                 //defaultValue={props.userData["preference_one"]}
-                onChange={(e) =>
-                  setIngredients(e.target.value)
-                }
+                onChange={(e) => setIngredients(e.target.value)}
                 fullWidth
                 sx={{ m: 1, width: "51.69ch" }}
                 variant="filled"
@@ -140,9 +161,7 @@ export default function IndividualRecipeCard(props) {
                 multiline
                 rows={2}
                 //defaultValue={props.userData["preference_two"]}
-                onChange={(e) =>
-                  setInstructions(e.target.value)
-                }
+                onChange={(e) => setInstructions(e.target.value)}
                 fullWidth
                 sx={{ m: 1, width: "51.69ch" }}
                 variant="filled"
@@ -153,9 +172,7 @@ export default function IndividualRecipeCard(props) {
                 id="name"
                 label="Meal Type"
                 //defaultValue={props.userData["first_name"]}
-                onChange={(e) =>
-                  setMealType(e.target.value)
-                }
+                onChange={(e) => setMealType(e.target.value)}
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
               />
@@ -164,9 +181,7 @@ export default function IndividualRecipeCard(props) {
                 margin="normal"
                 id="name"
                 //defaultValue={props.userData["last_name"]}
-                onChange={(e) =>
-                  setHealthLabel(e.target.value)
-                }
+                onChange={(e) => setHealthLabel(e.target.value)}
                 label="Health Labels"
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
@@ -177,9 +192,7 @@ export default function IndividualRecipeCard(props) {
                 id="name"
                 label="Health Score"
                 //defaultValue={props.userData["first_name"]}
-                onChange={(e) =>
-                  setHealthScore(e.target.value)
-                }
+                onChange={(e) => setHealthScore(e.target.value)}
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
               />
@@ -188,9 +201,7 @@ export default function IndividualRecipeCard(props) {
                 margin="normal"
                 id="name"
                 //defaultValue={props.userData["last_name"]}
-                onChange={(e) =>
-                  setServings(e.target.value)
-                }
+                onChange={(e) => setServings(e.target.value)}
                 label="Servings"
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
@@ -201,9 +212,7 @@ export default function IndividualRecipeCard(props) {
                 multiline
                 rows={1}
                 //defaultValue={props.userData["user_picture"]}
-                onChange={(e) =>
-                  setRecipePicture(e.target.value)
-                }
+                onChange={(e) => setRecipePicture(e.target.value)}
                 fullWidth
                 sx={{ m: 1, width: "51.69ch" }}
                 variant="filled"

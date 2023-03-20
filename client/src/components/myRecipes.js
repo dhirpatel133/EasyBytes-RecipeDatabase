@@ -42,7 +42,42 @@ export default function MyRecipes(props) {
     toggleShow()
   };
 
-  /*const alertError = (message, errIcon) => {
+  return (
+    <div>
+      <header>
+        <MainNavBar />
+      </header>
+      <h4
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        Welcome to you recipes page. Here, you will find all the posts that you
+        have created!
+      </h4>
+      <Button onClick={() => handleClickOpenNewPost()} style={{"float": "right", "marginRight":"4%"}}>
+        <Tooltip title="Add new recipe">
+          <AddCircleIcon fontSize='large'></AddCircleIcon>
+        </Tooltip>
+      </Button>
+      {show && (
+        <IndividualRecipeCard
+          show={show}
+          toggleShow={toggleShow}
+          newPost = {true}
+          recipeData={recipeData}
+        />
+      )}
+    </div>
+  );
+}
+
+
+
+
+
+/*const alertError = (message, errIcon) => {
     Swal.fire({
       position: "top",
       icon: errIcon,
@@ -83,34 +118,3 @@ export default function MyRecipes(props) {
       });
     }
   };*/
-
-  return (
-    <div>
-      <header>
-        <MainNavBar />
-      </header>
-      <h4
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        Welcome to you recipes page. Here, you will find all the posts that you
-        have created!
-      </h4>
-      <Button onClick={() => handleClickOpenNewPost()} style={{"float": "right", "marginRight":"4%"}}>
-        <Tooltip title="Add new recipe">
-          <AddCircleIcon fontSize='large'></AddCircleIcon>
-        </Tooltip>
-      </Button>
-      {show && (
-        <IndividualRecipeCard
-          show={show}
-          toggleShow={toggleShow}
-          newPost = {true}
-          recipeData={recipeData}
-        />
-      )}
-    </div>
-  );
-}
