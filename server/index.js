@@ -108,35 +108,28 @@ let mySQLTime = new Date(
   .slice(0, 19)
   .replace("T", " ");
 
-app.get("/createPost", (req, res) => {
+app.post("/createPost", (req, res) => {
   // put error checking
   // remove double query
-  let dishName = req.query.dishName;
-  let cuisine = req.query.cuisine;
-  let cookTime = req.query.cookTime;
-  let ingredients = req.query.ingredients;
-  let instructions = req.query.instructions;
-  let calories = req.query.calories;
-  let mealType = req.query.mealType;
-  let healthLabel = req.query.healthLabel;
-  let healthScore = req.query.healthScore;
-  let servings = req.query.servings;
-  let picture = req.query.picture;
-  let userID = req.query.userID;
+  let dishName = req.body.dishName;
+  let cuisine = req.body.cuisine;
+  let cookTime = req.body.cookTime;
+  let ingredients = req.body.ingredients;
+  let instructions = req.body.instructions;
+  let calories = req.body.calories;
+  let mealType = req.body.mealType;
+  let healthLabel = req.body.healthLabel;
+  let healthScore = req.body.healthScore;
+  let servings = req.body.servings;
+  let picture = req.body.picture;
+  let userID = req.body.userID;
   let createdAt = mySQLTime;
   let updatedAt = mySQLTime;
-  console.log(recipeID, postID);
   console.log(createdAt, updatedAt);
   connection.query(
-    `INSERT INTO recipes(name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture) VALUE ('${dishName}', '${cuisine}', ${cookTime}, '${ingredients}', '${instructions}', ${calories}, '${mealType}', '${healthLabel}', ${healthScore}, ${servings}, '${picture}');`,
+    `INSERT INTO recipes(user_id, name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture, created_date, modified_date) VALUE (${userID}, '${dishName}', '${cuisine}', ${cookTime}, '${ingredients}', '${instructions}', ${calories}, '${mealType}', '${healthLabel}', ${healthScore}, ${servings}, '${picture}', '${createdAt}', '${updatedAt}');`,
     function (err, results, fields) {
-      connection.query(
-        `INSERT INTO posts(recipe_id, user_id, created_date, modified_date) VALUE (${recipeID}, ${userID}, '${createdAt}', '${updatedAt}');`,
-        function (err, results, fields) {
-          console.log(results);
-          res.send(results);
-        }
-      );
+      res.send(results);
     }
   );
 });
