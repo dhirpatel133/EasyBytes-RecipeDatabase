@@ -8,7 +8,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: "recipe_db",
   user: "root",
-  password: "password", // replace this password with the password for you root user
+  password: "root", // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -152,6 +152,35 @@ app.post("/createPost", (req, res) => {
       createdAt,
       updatedAt,
     ],
+    (err, result, fields) => {
+      if (err) {
+        console.log(err);
+        res.send("invalid");
+      } else {
+        res.send("valid");
+      }
+    }
+  );
+});
+
+app.put("/updatePost", (req, res) => {
+  // put error checking
+  let dishName = req.body.recipeName;
+  let cuisine = req.body.cuisine;
+  let cookTime = req.body.cookTime;
+  let ingredients = req.body.ingredients;
+  let instructions = req.body.instructions;
+  let calories = req.body.calories;
+  let mealType = req.body.mealType;
+  let healthLabel = req.body.healthLabel;
+  let healthScore = req.body.healthScore;
+  let servings = req.body.servings;
+  let picture = req.body.recipePicture;
+  let recipeID = req.body.recipeID;
+  let updatedAt = mySQLTime;
+  let updateRecipe = `UPDATE recipes SET dish_name='${dishName}', cuisine='${cuisine}', cook_time=${cookTime}, ingredients='${ingredients}', instructions='${instructions}', calories=${calories}, meal_type='${mealType}', health_label='${healthLabel}', health_score=${healthScore}, servings=${servings}, recipe_picture='${picture}', date_modified='${updatedAt}' WHERE recipe_id=${recipeID};`
+  connection.query(
+    updateRecipe,
     (err, result, fields) => {
       if (err) {
         console.log(err);

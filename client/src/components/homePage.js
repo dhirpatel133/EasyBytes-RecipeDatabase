@@ -37,7 +37,7 @@ const Home = () => {
           justifyContent: "center",
         }}
       >
-        Welcome to EasyBytes user {userIDRef.current}
+        Welcome to EasyBytes!
       </h4>
       <SelectionModel
         style={{ padding: 300 }}

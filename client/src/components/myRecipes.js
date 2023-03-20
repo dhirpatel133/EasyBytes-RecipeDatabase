@@ -67,8 +67,7 @@ export default function MyRecipes(props) {
           justifyContent: "center",
         }}
       >
-        Welcome to you recipes page. Here, you will find all the posts that you
-        have created!
+        Welcome to your recipes page. Here, you will find all the posts that you have created!
       </h4>
       <Button onClick={() => handleClickOpenNewPost()} style={{"float": "right", "marginRight":"4%"}}>
         <Tooltip title="Add new recipe">

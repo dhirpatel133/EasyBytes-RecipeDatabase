@@ -57,8 +57,6 @@ const UserRecipeCard = ({post}) => {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            Eb
-
           </Avatar>
         }
         action={

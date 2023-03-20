@@ -85,8 +85,9 @@ export default function IndividualRecipeCard(props) {
         }
       });
     } else {
-      console.log({
-        userID: sessionStorage.getItem("authenticated"),
+      console.log(props)
+      Axios.put("http://localhost:5000/updatePost", {
+        recipeID: props.recipeData.recipe_id,
         recipeName: recipeName,
         cuisine: cuisineName,
         cookTime: cookTime,
@@ -98,7 +99,20 @@ export default function IndividualRecipeCard(props) {
         healthScore: healthScore,
         servings: servings,
         recipePicture: recipePicture,
-      })
+      }).then((response) => {
+        // console.log(response.data[0]["user_id"]);
+        if (response.data === "invalid") {
+          props.toggleShow();
+          let message = "Failed to update recipe.";
+          let errIcon = "error";
+          alertError(message, errIcon);
+        } else {
+          props.toggleShow();
+          let message = "Recipe successfully created!";
+          let errIcon = "success";
+          alertError(message, errIcon);
+        }
+      });
     }
   };
 
