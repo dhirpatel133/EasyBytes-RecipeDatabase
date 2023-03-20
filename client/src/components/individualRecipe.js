@@ -14,8 +14,9 @@ import Swal from "sweetalert2";
 
 export default function IndividualRecipeCard(props) {
   const navigate = useNavigate();
+  console.log(props.recipeData)
 
-  const [recipeName, setRecipeName] = useState(props.recipeData["recipe_name"]);
+  const [recipeName, setRecipeName] = useState(props.recipeData["dish_name"]);
   const [cuisineName, setCuisineName] = useState(props.recipeData["cuisine"]);
   const [cookTime, setCookTime] = useState(props.recipeData["cook_time"]);
   const [ingredients, setIngredients] = useState(
@@ -54,8 +55,8 @@ export default function IndividualRecipeCard(props) {
   };
 
   const updateRecipe = () => {
+    props.toggleShow();
     if (props.newPost) {
-      props.toggleShow();
       Axios.post("http://localhost:5000/createPost", {
         userID: sessionStorage.getItem("authenticated"),
         recipeName: recipeName,
@@ -83,6 +84,21 @@ export default function IndividualRecipeCard(props) {
           alertError(message, errIcon);
         }
       });
+    } else {
+      console.log({
+        userID: sessionStorage.getItem("authenticated"),
+        recipeName: recipeName,
+        cuisine: cuisineName,
+        cookTime: cookTime,
+        ingredients: ingredients,
+        instructions: instructions,
+        calories: calories,
+        mealType: mealType,
+        healthLabel: healthLabel,
+        healthScore: healthScore,
+        servings: servings,
+        recipePicture: recipePicture,
+      })
     }
   };
 
@@ -104,7 +120,7 @@ export default function IndividualRecipeCard(props) {
                 margin="normal"
                 id="name"
                 label="Recipe Name"
-                //defaultValue={props.userData["first_name"]}
+                defaultValue={props.recipeData["dish_name"]}
                 onChange={(e) => setRecipeName(e.target.value)}
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
@@ -114,7 +130,7 @@ export default function IndividualRecipeCard(props) {
                 required
                 margin="normal"
                 id="name"
-                //defaultValue={props.userData["last_name"]}
+                defaultValue={props.recipeData["cuisine"]}
                 onChange={(e) => setCuisineName(e.target.value)}
                 label="Cuisine"
                 variant="filled"
@@ -126,7 +142,7 @@ export default function IndividualRecipeCard(props) {
                 margin="normal"
                 id="name"
                 label="Cook Time"
-                //defaultValue={props.userData["first_name"]}
+                defaultValue={props.recipeData["cook_time"]}
                 onChange={(e) => setCookTime(e.target.value)}
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
@@ -136,7 +152,7 @@ export default function IndividualRecipeCard(props) {
                 required
                 margin="normal"
                 id="name"
-                //defaultValue={props.userData["last_name"]}
+                defaultValue={props.recipeData["calories"]}
                 onChange={(e) => setCalories(e.target.value)}
                 label="Calories"
                 variant="filled"
@@ -148,7 +164,7 @@ export default function IndividualRecipeCard(props) {
                 label="Ingredients"
                 multiline
                 rows={2}
-                //defaultValue={props.userData["preference_one"]}
+                defaultValue={props.recipeData["ingredients"]}
                 onChange={(e) => setIngredients(e.target.value)}
                 fullWidth
                 sx={{ m: 1, width: "51.69ch" }}
@@ -160,7 +176,7 @@ export default function IndividualRecipeCard(props) {
                 label="Recipe Instructions"
                 multiline
                 rows={2}
-                //defaultValue={props.userData["preference_two"]}
+                defaultValue={props.recipeData["instructions"]}
                 onChange={(e) => setInstructions(e.target.value)}
                 fullWidth
                 sx={{ m: 1, width: "51.69ch" }}
@@ -171,7 +187,7 @@ export default function IndividualRecipeCard(props) {
                 margin="normal"
                 id="name"
                 label="Meal Type"
-                //defaultValue={props.userData["first_name"]}
+                defaultValue={props.recipeData["meal_type"]}
                 onChange={(e) => setMealType(e.target.value)}
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
@@ -180,7 +196,7 @@ export default function IndividualRecipeCard(props) {
                 autoFocus
                 margin="normal"
                 id="name"
-                //defaultValue={props.userData["last_name"]}
+                defaultValue={props.recipeData["health_label"]}
                 onChange={(e) => setHealthLabel(e.target.value)}
                 label="Health Labels"
                 variant="filled"
@@ -191,7 +207,7 @@ export default function IndividualRecipeCard(props) {
                 margin="normal"
                 id="name"
                 label="Health Score"
-                //defaultValue={props.userData["first_name"]}
+                defaultValue={props.recipeData["health_score"]}
                 onChange={(e) => setHealthScore(e.target.value)}
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
@@ -200,7 +216,7 @@ export default function IndividualRecipeCard(props) {
                 autoFocus
                 margin="normal"
                 id="name"
-                //defaultValue={props.userData["last_name"]}
+                defaultValue={props.recipeData["servings"]}
                 onChange={(e) => setServings(e.target.value)}
                 label="Servings"
                 variant="filled"
@@ -211,7 +227,7 @@ export default function IndividualRecipeCard(props) {
                 label="Recipe Picture URL"
                 multiline
                 rows={1}
-                //defaultValue={props.userData["user_picture"]}
+                defaultValue={props.recipeData["recipe_picture"]}
                 onChange={(e) => setRecipePicture(e.target.value)}
                 fullWidth
                 sx={{ m: 1, width: "51.69ch" }}

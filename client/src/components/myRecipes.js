@@ -7,11 +7,13 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Grid, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import IndividualRecipeCard from './individualRecipe';
+import { CircularProgress } from '@mui/material';
+import UserRecipeCard from './userRecipeCard';
 
 export default function MyRecipes(props) {
 
   var recipeData = {
-    recipe_name: "",
+    dish_name: "",
     cuisine: "",
     cook_time: "",
     ingredients: "",
@@ -41,6 +43,18 @@ export default function MyRecipes(props) {
   const handleClickOpenNewPost = () => {
     toggleShow()
   };
+  let id = sessionStorage.getItem("authenticated")
+  let url = `http://localhost:5000/getUserPosts?user_id=${id}`;
+  const [data, setData] = useState("");
+  
+    const getData = async (event) => {
+      const res = await fetch(url);    
+      const data = await res.json();
+      const outputData = data;
+      setData(outputData);
+    };
+
+    getData();
 
   return (
     <div>
@@ -61,6 +75,17 @@ export default function MyRecipes(props) {
           <AddCircleIcon fontSize='large'></AddCircleIcon>
         </Tooltip>
       </Button>
+      {data === "" ? <CircularProgress /> : 
+        <div style={{padding: 20}}>
+          <Grid container alignItems="stretch" spacing={2}>
+            {data.map((post) => (
+              <Grid key={post.recipe_id} item xs={4} sm={3}>
+                <UserRecipeCard post={post}></UserRecipeCard>
+              </Grid>
+        ))}
+        </Grid>
+          
+        </div>}
       {show && (
         <IndividualRecipeCard
           show={show}

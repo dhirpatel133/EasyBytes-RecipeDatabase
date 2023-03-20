@@ -9,15 +9,21 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
 import { red } from '@mui/material/colors';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import CommentIcon from '@mui/icons-material/Comment';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ScrollBar from 'react-custom-scrollbars'
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Axios from "axios";
+import IndividualRecipeCard from './individualRecipe';
 
 function getFormattedDate(date) {
   return date.substring(0,10)
+}
+function deleteRecipe(recipe_id) {
+    console.log(recipe_id)
+    Axios.delete(`http://localhost:5000/deleteRecipes?recipe_id=${recipe_id}`)
 }
 
 const ExpandMore = styled((props) => {
@@ -31,26 +37,36 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const RecipeReviewCard = ({post}) => {
-  // console.log(post)
+const UserRecipeCard = ({post}) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const [show, setShow] = useState(false);
+
+  function toggleShow() {
+    setShow(!show);
+  }
+  const handleClickOpenNewPost = () => {
+    toggleShow()
+  };
   return (
-    <Card sx={{ maxWidth: 500 }}>
+    <div>
+    <Card sx={{ maxWidth: 500}}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {post.first_name !== null ? post.first_name[0] + post.last_name[0] : "EB"}
+            Eb
+
           </Avatar>
         }
         action={
-          <IconButton aria-label="favourite">
-          <BookmarkIcon />
+          <IconButton aria-label="edit" onClick={() => { handleClickOpenNewPost() }}>
+          <EditIcon fontSize = "medium"/>
           </IconButton>
         }
+          
         title={post.dish_name}
         subheader={getFormattedDate(post.date_modified)}
       />
@@ -87,11 +103,8 @@ const RecipeReviewCard = ({post}) => {
         </ScrollBar>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="like post">
-          <ThumbUpIcon />
-        </IconButton>
-        <IconButton aria-label="comment on post">
-          <CommentIcon />
+        <IconButton aria-label="delete" onClick={() => { deleteRecipe(post.recipe_id) }}>
+            <DeleteIcon fontSize="large" />
         </IconButton>
         <ExpandMore
           expand={expanded}
@@ -111,7 +124,16 @@ const RecipeReviewCard = ({post}) => {
         </CardContent>
       </Collapse>
     </Card>
+    {show && (
+        <IndividualRecipeCard
+          show={show}
+          toggleShow={toggleShow}
+          newPost = {false}
+          recipeData={post}
+        />
+      )}
+    </div>
   );
 }
 
-export default RecipeReviewCard;
+export default UserRecipeCard;

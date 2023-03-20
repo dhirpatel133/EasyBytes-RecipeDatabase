@@ -8,7 +8,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: "recipe_db",
   user: "root",
-  password: "mysqlroot", // replace this password with the password for you root user
+  password: "password", // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -36,6 +36,17 @@ app.get("/getAllPosts", (req, res) => {
   //res.send('Backend: Hello World!')
   connection.query(
     "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id;",
+    function (err, results) {
+      res.send(results); // results contains rows returned by server
+    }
+  );
+});
+
+app.get("/getUserPosts", (req, res) => {
+  //res.send('Backend: Hello World!')
+  let user_id = req.query.user_id;
+  connection.query(
+    `SELECT * FROM recipes WHERE recipes.user_id = ${user_id};`,
     function (err, results) {
       res.send(results); // results contains rows returned by server
     }
@@ -103,10 +114,7 @@ let mySQLTime = new Date(
   currentTime.getMinutes(),
   currentTime.getSeconds(),
   currentTime.getMilliseconds()
-)
-  .toISOString()
-  .slice(0, 19)
-  .replace("T", " ");
+).toISOString().slice(0, 19).replace("T", " ");
 
 app.post("/createPost", (req, res) => {
   // put error checking
@@ -155,12 +163,12 @@ app.post("/createPost", (req, res) => {
   );
 });
 
-app.get("/deletePost", (req, res) => {
+app.delete("/deleteRecipes", (req, res) => {
   // fix query
-  let post_id = req.query.postid;
+  let recipe_id = req.query.recipe_id;
 
   connection.query(
-    `DELETE FROM recipes WHERE recipe_id = (SELECT recipe_id FROM posts WHERE post_id = ${post_id});`,
+    `DELETE FROM recipes WHERE recipe_id = ${recipe_id};`,
     function (err, results, fields) {
       res.send(results);
     }
