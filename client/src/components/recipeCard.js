@@ -15,6 +15,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ScrollBar from 'react-custom-scrollbars'
+import { Tooltip } from '@mui/material';
 
 function getFormattedDate(date) {
   return date.substring(0,19).replace('T', ' ')
@@ -48,7 +49,9 @@ const RecipeReviewCard = ({post}) => {
         }
         action={
           <IconButton aria-label="favourite">
+            <Tooltip title="Favourite recipe">
           <BookmarkIcon />
+          </Tooltip>
           </IconButton>
         }
         title={post.dish_name}
@@ -89,10 +92,14 @@ const RecipeReviewCard = ({post}) => {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="like post">
+          <Tooltip title="Like recipe">
           <ThumbUpIcon />
+          </Tooltip>
         </IconButton>
         <IconButton aria-label="comment on post">
+          <Tooltip title="Comment on post">
           <CommentIcon />
+          </Tooltip>
         </IconButton>
         <ExpandMore
           expand={expanded}
@@ -100,7 +107,9 @@ const RecipeReviewCard = ({post}) => {
           aria-expanded={expanded}
           aria-label="show more"
         >
+          <Tooltip title="View recipe instructions">
           <ExpandMoreIcon />
+          </Tooltip>
         </ExpandMore>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>

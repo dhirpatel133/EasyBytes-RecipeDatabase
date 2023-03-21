@@ -17,6 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Axios from "axios";
 import IndividualRecipeCard from './individualRecipe';
+import { Tooltip } from '@mui/material';
 
 function getFormattedDate(date) {
   return date.substring(0,19).replace('T', ' ')
@@ -61,7 +62,9 @@ const UserRecipeCard = ({post}) => {
         }
         action={
           <IconButton aria-label="edit" onClick={() => { handleClickOpenNewPost() }}>
+            <Tooltip title="Edit recipe">
           <EditIcon fontSize = "medium"/>
+          </Tooltip>
           </IconButton>
         }
           
@@ -103,7 +106,9 @@ const UserRecipeCard = ({post}) => {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="delete" onClick={() => { deleteRecipe(post.recipe_id) }}>
+            <Tooltip title="Delete recipe">
             <DeleteIcon fontSize="large" />
+            </Tooltip>
         </IconButton>
         <ExpandMore
           expand={expanded}
@@ -111,7 +116,9 @@ const UserRecipeCard = ({post}) => {
           aria-expanded={expanded}
           aria-label="show more"
         >
+          <Tooltip title="View recipe instructions">
           <ExpandMoreIcon />
+          </Tooltip>
         </ExpandMore>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
