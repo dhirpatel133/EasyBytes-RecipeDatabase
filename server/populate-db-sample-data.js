@@ -27,7 +27,7 @@ function deleteTables() {
 
 function createTables() {
   var createTableQueries = readline.createInterface({
-    input: fs.createReadStream("../db/createtables.sql"),
+    input: fs.createReadStream("../db/createsampletables.sql"),
     terminal: false
    });
   
