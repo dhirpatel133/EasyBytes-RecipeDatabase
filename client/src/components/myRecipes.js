@@ -69,7 +69,7 @@ export default function MyRecipes(props) {
       >
         Welcome to your recipes page. Here, you will find all the posts that you have created!
       </h4>
-      <Button onClick={() => handleClickOpenNewPost()} style={{"float": "right", "marginRight":"4%"}}>
+      <Button onClick={() => handleClickOpenNewPost()} style={{"float": "right", "marginRight":"2.8%"}}>
         <Tooltip title="Add new recipe">
           <AddCircleIcon fontSize='large'></AddCircleIcon>
         </Tooltip>
