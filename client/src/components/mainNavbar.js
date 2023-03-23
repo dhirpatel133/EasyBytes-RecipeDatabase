@@ -256,6 +256,7 @@ const MainNavBar = () => {
       {show && (
         <UserProfileModal
           show={show}
+          myProfile={true}
           toggleShow={toggleShow}
           userData={userData}
         />

@@ -49,7 +49,8 @@ export default function FormDialog(props) {
   const updateUser = () => {
     if (firstName === "" || lastName === "") {
       props.toggleShow();
-      let message = "Profile not updated. First and last name are required fields.";
+      let message =
+        "Profile not updated. First and last name are required fields.";
       let errIcon = "error";
       alertError(message, errIcon);
     } else {
@@ -80,11 +81,17 @@ export default function FormDialog(props) {
 
   return (
     <div>
-      <Dialog open={props.show} onClose={handleClose}>
+      <Dialog open={props.show} onClose={props.toggleShow}>
         <DialogTitle>
-          <Typography variant="h4" align="center">
-            Update Profile
-          </Typography>
+          {props.myProfile ? (
+            <Typography variant="h4" align="center">
+              Update Your Profile
+            </Typography>
+          ) : (
+            <Typography variant="h4" align="center">
+              {props.userData["user_name"]} Profile
+            </Typography>
+          )}
           <div
             style={{
               display: "flex",
@@ -203,8 +210,12 @@ export default function FormDialog(props) {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.toggleShow}>Cancel</Button>
-          <Button onClick={updateUser}>Update</Button>
+          {props.myProfile && (
+            <>
+              <Button onClick={props.toggleShow}>Cancel</Button>
+              <Button onClick={updateUser}>Update</Button>
+            </>
+          )}
         </DialogActions>
       </Dialog>
     </div>
