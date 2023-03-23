@@ -85,7 +85,6 @@ export default function IndividualRecipeCard(props) {
         }
       });
     } else {
-      console.log(props)
       Axios.put("http://localhost:5000/updatePost", {
         recipeID: props.recipeData.recipe_id,
         recipeName: recipeName,

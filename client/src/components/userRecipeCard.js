@@ -18,12 +18,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import Axios from "axios";
 import IndividualRecipeCard from './individualRecipe';
 import { Tooltip } from '@mui/material';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import CommentIcon from '@mui/icons-material/Comment';
 
 function getFormattedDate(date) {
   return date.substring(0,19).replace('T', ' ')
 }
 function deleteRecipe(recipe_id) {
-    console.log(recipe_id)
     Axios.delete(`http://localhost:5000/deleteRecipes?recipe_id=${recipe_id}`)
 }
 
@@ -52,6 +53,7 @@ const UserRecipeCard = ({post}) => {
   const handleClickOpenNewPost = () => {
     toggleShow()
   };
+
   return (
     <div>
     <Card sx={{ maxWidth: 500}}>

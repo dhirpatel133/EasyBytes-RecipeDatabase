@@ -16,6 +16,8 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ScrollBar from 'react-custom-scrollbars'
 import { Tooltip } from '@mui/material';
+import Axios from "axios";
+import { useState } from 'react';
 
 function getFormattedDate(date) {
   return date.substring(0,19).replace('T', ' ')
@@ -32,13 +34,57 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
+// primary for colour for like icon
 const RecipeReviewCard = ({post}) => {
-  // console.log(post)
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  
+  const [likes, setLikes] = useState(0);
+
+  const getLikeCount = () => {
+    Axios.get(`http://localhost:5000/likes?recipeID=${post.recipe_id}`).then((response) => {
+      const data = response.data[0].like_count
+      setLikes(data)
+    });
+  }
+
+  const getLikeButtonColour = () => {
+    Axios.get(`http://localhost:5000/usersLiked?recipeID=${post.recipe_id}`).then((response) => {
+      if (response.data.includes(Number(sessionStorage.getItem("authenticated")))) {
+        setlikedButtonColour('primary')
+        setLiked(true)
+      }
+      else {
+        setlikedButtonColour('')
+        setLiked(false)
+      }
+    });
+  }
+
+  const [liked, setLiked] = useState(false);
+  const [likedButtonColour, setlikedButtonColour] = useState('')
+
+  function updateLikes() {
+    if (!liked) {
+      Axios.post("http://localhost:5000/likes",   {
+        userID: sessionStorage.getItem("authenticated"),
+        recipeID: post.recipe_id
+      })
+      getLikeButtonColour()
+    }
+    else {
+      Axios.delete(`http://localhost:5000/likes?recipeID=${post.recipe_id}&userID=${sessionStorage.getItem("authenticated")}`)
+      getLikeButtonColour()
+    }
+  }
+
+  getLikeCount();
+  getLikeButtonColour();
+
   return (
     <Card sx={{ maxWidth: 500 }}>
       <CardHeader
@@ -91,9 +137,10 @@ const RecipeReviewCard = ({post}) => {
         </ScrollBar>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="like post">
+        <Typography variant="subheading1" color="black" margin={1}><strong>{likes}</strong></Typography>
+        <IconButton aria-label="like post" onClick={updateLikes}>
           <Tooltip title="Like recipe">
-          <ThumbUpIcon />
+          <ThumbUpIcon color={likedButtonColour} />
           </Tooltip>
         </IconButton>
         <IconButton aria-label="comment on post">

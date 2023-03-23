@@ -166,7 +166,6 @@ app.put("/updatePost", (req, res) => {
 
 app.delete("/deleteRecipes", (req, res) => {
   let recipe_id = req.query.recipe_id;
-
   connection.query(
     `DELETE FROM recipes WHERE recipe_id = ${recipe_id};`,
     function (err, results, fields) {
@@ -282,6 +281,60 @@ app.post("/updateUserData", (req, res) => {
           res.send("invalid");
         }
       }
+    }
+  );
+});
+
+// API routes for likes functionality
+app.get("/likes", (req, res) => {
+  let recipeID = req.query.recipeID
+  connection.query(
+    `SELECT COUNT(*) AS like_count FROM likes where recipe_id = ${recipeID};`,
+    function (err, results) {
+      res.send(results); // results contains rows returned by server
+    }
+  );
+});
+
+// get all users who liked this post
+app.get("/usersLiked", (req, res) => {
+  let userIDs = []
+  let recipeID = req.query.recipeID
+  connection.query(
+    `SELECT user_id FROM likes where recipe_id = ${recipeID};`,
+    function (err, results) {
+      for (let i = 0; i < results.length; ++i) {
+        userIDs.push(results[i].user_id)
+      }
+      res.send(userIDs); // results contains rows returned by server
+    }
+  );
+});
+
+// insert a new like when user likes post
+app.post("/likes", (req, res) => {
+  let recipeID = req.body.recipeID
+  let userID = req.body.userID
+  connection.query(
+    `INSERT INTO likes(recipe_id, user_id) VALUES (${recipeID}, ${userID});`,
+    function (err, results) {
+      if (err) {
+        res.send("invalid");
+      } else {
+        res.send("valid")
+      }
+    }
+  );
+});
+
+// removes like from table when user unlikes post
+app.delete("/likes", (req, res) => {
+  let recipeID = req.query.recipeID
+  let userID = req.query.userID
+  connection.query(
+    `DELETE FROM likes WHERE recipe_id = ${recipeID} AND user_id = ${userID};`,
+    function (err, results, fields) {
+      res.send(results);
     }
   );
 });
