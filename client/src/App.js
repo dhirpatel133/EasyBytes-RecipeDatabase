@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Routes, Route } from "react-router-dom";
 import Home from "./components/homePage";
 import MyRecipes from "./components/myRecipes";
+import SuggestedPosts from "./components/suggestedPosts";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -26,6 +27,7 @@ const App = () => {
         }
       />
       <Route path="/myRecipes" element={<MyRecipes />} />
+      <Route path="/suggestedPosts" element={<SuggestedPosts />} />
     </Routes>
   );
 };

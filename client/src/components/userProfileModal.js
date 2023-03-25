@@ -11,7 +11,53 @@ import {
   DialogTitle,
   Typography,
   Box,
+  Select,
+  OutlinedInput,
+  MenuItem,
+  ListItemText,
+  InputLabel
 } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    }
+  }
+};
+
+const cuisine_preference = [
+  "None",
+  "Mediterranean",
+  "British",
+  "French",
+  "Mexican",
+  "Indian",
+  "Italian",
+  "American"
+];
+
+const meal_preference = [
+  "None",
+  "Breakfast",
+  "Lunch",
+  "Side Dish",
+  "Snack",
+  "Dinner",
+  "Dessert"
+];
+
+const diet_preference = [
+  "None",
+  "Vegetarian",
+  "Vegan",
+  "Dairy-Free",
+  "Gluten-Free"
+];
 
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(props.show);
@@ -20,21 +66,17 @@ export default function FormDialog(props) {
   );
   const [lastName, setLastName] = React.useState(props.userData["last_name"]);
   const [preferenceOne, setPreferenceOne] = React.useState(
-    props.userData["preference_one"]
+    props.userData["preference_one"] != null ? props.userData["preference_one"] : "None"
   );
   const [preferenceTwo, setPreferenceTwo] = React.useState(
-    props.userData["preference_two"]
+    props.userData["preference_two"] != null ? props.userData["preference_two"] : "None"
   );
   const [preferenceThree, setPreferenceThree] = React.useState(
-    props.userData["preference_three"]
+    props.userData["preference_three"] != null ? props.userData["preference_three"] : "None"
   );
   const [userPicture, setUserPicture] = React.useState(
     props.userData["user_picture"]
   );
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const alertError = (message, errIcon) => {
     Swal.fire({
@@ -63,14 +105,13 @@ export default function FormDialog(props) {
         preferenceThree: preferenceThree,
         userPicture: userPicture,
       }).then((response) => {
-        // console.log(response.data[0]["user_id"]);
         if (response.data === "invalid") {
           props.toggleShow();
           let message = "Failed to update your data. Please try again.";
           let errIcon = "error";
           alertError(message, errIcon);
         } else {
-          props.toggleShow();
+          setTimeout(props.toggleShow(), 250);
           let message = "Your profile has been updated!";
           let errIcon = "success";
           alertError(message, errIcon);
@@ -137,6 +178,7 @@ export default function FormDialog(props) {
                 }
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
+                InputProps={!props.myProfile && {readOnly: true}}
               />
               <TextField
                 autoFocus
@@ -150,6 +192,7 @@ export default function FormDialog(props) {
                 label="Last Name"
                 variant="filled"
                 sx={{ m: 1, width: "25ch" }}
+                InputProps={!props.myProfile && {readOnly: true}}
               />
               <TextField
                 id="filled-multiline-static"
@@ -163,49 +206,74 @@ export default function FormDialog(props) {
                 fullWidth
                 sx={{ m: 1, width: "51.69ch" }}
                 variant="filled"
+                InputProps={!props.myProfile && {readOnly: true}}
               />
-              <TextField
-                id="filled-multiline-static"
-                label="Preference 1"
-                multiline
-                rows={2}
-                defaultValue={props.userData["preference_one"]}
-                onChange={(e) =>
-                  setPreferenceOne(e.target.value, console.log(preferenceOne))
-                }
-                fullWidth
-                sx={{ m: 1, width: "51.69ch" }}
-                variant="filled"
-              />
-              <TextField
-                id="filled-multiline-static"
-                label="Preference 2"
-                multiline
-                rows={2}
-                defaultValue={props.userData["preference_two"]}
-                onChange={(e) =>
-                  setPreferenceTwo(e.target.value, console.log(preferenceTwo))
-                }
-                fullWidth
-                sx={{ m: 1, width: "51.69ch" }}
-                variant="filled"
-              />
-              <TextField
-                id="filled-multiline-static"
-                label="Preference 3"
-                multiline
-                rows={2}
-                defaultValue={props.userData["preference_three"]}
-                onChange={(e) =>
-                  setPreferenceThree(
-                    e.target.value,
-                    console.log(preferenceThree)
-                  )
-                }
-                fullWidth
-                sx={{ m: 1, width: "51.69ch" }}
-                variant="filled"
-              />
+             <FormControl sx={{ m: 1, width: "51.69ch" }}>
+                <InputLabel id="meal-type">Cuisine Preference</InputLabel>
+                <Select
+                  labelId="cuisine-type"
+                  id="cuisine-type"
+                  defaultValue={preferenceOne}
+                  onChange={(e) =>
+                    setPreferenceOne(
+                      e.target.value,
+                      console.log(preferenceOne)
+                    )
+                  }
+                  input={<OutlinedInput label="Tag" />}
+                  MenuProps={MenuProps}
+                >
+                  {cuisine_preference.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      <ListItemText primary={name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+            </FormControl >
+            <FormControl sx={{ m: 1, width: "51.69ch" }}>
+                <InputLabel id="diet-type">Diet Preference</InputLabel>
+                <Select
+                  labelId="diet-type"
+                  id="diet-type"
+                  defaultValue={preferenceTwo}
+                  onChange={(e) =>
+                    setPreferenceTwo(
+                      e.target.value,
+                      console.log(e.target.value),
+                    )
+                  }
+                  input={<OutlinedInput label="Tag" />}
+                  MenuProps={MenuProps}
+                >
+                  {diet_preference.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      <ListItemText primary={name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+            </FormControl>
+            <FormControl sx={{ m: 1, width: "51.69ch" }}>
+                <InputLabel id="meal-type">Meal Type Preference</InputLabel>
+                <Select
+                  labelId="meal-type"
+                  id="meal-type"
+                  defaultValue={preferenceThree}
+                  onChange={(e) =>
+                    setPreferenceThree(
+                      e.target.value,
+                      console.log(e.target.value)
+                    )
+                  }
+                  input={<OutlinedInput label="Tag" />}
+                  MenuProps={MenuProps}
+                >
+                  {meal_preference.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      <ListItemText primary={name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+            </FormControl>
             </div>
           </Box>
         </DialogContent>

@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import Axios from "axios";
 
 const pages = ["Recipes", "My Recipes"];
-const settings = ["Profile", "Favourites", "Logout"];
+const settings = ["Profile", "Favourites", "Suggested", "Logout"];
 
 const MainNavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -103,11 +103,16 @@ const MainNavBar = () => {
     if (setting === "Favourites") {
       // TODO
     }
+    if (setting === "Suggested") {
+      navigate("/suggestedPosts")
+    }
     if (setting === "Logout") {
       sessionStorage.clear();
       navigate("/");
     }
   };
+
+  fetchUserData();
 
   return (
     <>

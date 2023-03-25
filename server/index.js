@@ -8,7 +8,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: "recipe_db",
   user: "root",
-  password: "mysqlroot", // replace this password with the password for you root user
+  password: "root", // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -252,9 +252,9 @@ app.post("/updateUserData", (req, res) => {
   let userID = req.body.userID;
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
-  let preferenceOne = req.body.preferenceOne;
-  let preferenceTwo = req.body.preferenceTwo;
-  let preferenceThree = req.body.preferenceThree;
+  let preferenceOne = req.body.preferenceOne != "None" ? req.body.preferenceOne : null;
+  let preferenceTwo = req.body.preferenceTwo != "None" ? req.body.preferenceTwo : null;
+  let preferenceThree = req.body.preferenceThree != "None" ? req.body.preferenceThree : null;
   let userPicture = req.body.userPicture;
   let updateUserQuery = `UPDATE recipe_db.publicuserinfo SET first_name = ?, last_name = ?, 
   preference_one = ?, preference_two = ?, preference_three = ?, user_picture = ? WHERE user_id = ?`;
@@ -335,6 +335,39 @@ app.delete("/likes", (req, res) => {
     `DELETE FROM likes WHERE recipe_id = ${recipeID} AND user_id = ${userID};`,
     function (err, results, fields) {
       res.send(results);
+    }
+  );
+});
+
+app.post("/getSuggestedPosts", (req, res) => {
+  if (req.body.preferenceOne == null && req.body.preferenceTwo == null && req.body.preferenceThree == null) {
+    res.send("none");
+    return;
+  }
+  let baseQuery = "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id "
+  let conditions = ''
+  if (req.body.preferenceOne != null) {
+    conditions += `cuisine = '${req.body.preferenceOne}' `
+  }
+  if (req.body.preferenceTwo != null) {
+    conditions += `AND health_label LIKE '%${req.body.preferenceTwo}%'`
+  }
+  if (req.body.preferenceThree != null) {
+    conditions += `AND meal_type LIKE '%${req.body.preferenceThree}%' `
+  }
+  if (conditions != '') {
+    baseQuery += "WHERE "
+  }
+  baseQuery = baseQuery  + conditions + ';'
+  connection.query(
+    baseQuery,
+    function (err, results) {
+      if (results.length == 0) {
+        res.send("none")
+      }
+      else {
+        res.send(results); // results contains rows returned by server
+      }
     }
   );
 });
