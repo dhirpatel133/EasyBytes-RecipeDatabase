@@ -9,7 +9,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: 'recipe_db',
   user: 'root',
-  password: 'mysqlroot' // replace this password with the password for you root user
+  password: 'root' // replace this password with the password for you root user
 });
 
 function deleteTables() {
@@ -27,7 +27,7 @@ function deleteTables() {
 
 function createTables() {
   var createTableQueries = readline.createInterface({
-    input: fs.createReadStream("../db/createtables.sql"),
+    input: fs.createReadStream("../db/createsampletables.sql"),
     terminal: false
    });
   

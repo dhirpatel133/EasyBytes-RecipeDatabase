@@ -4,7 +4,7 @@
 Feature (R6): Show all recipe posts
 */
 
-SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id;
+SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id LIMIT 10;
 
 /* 
 Feature (R7): Create new recipe posts
@@ -17,11 +17,11 @@ INSERT INTO recipes(user_id, dish_name, cuisine, cook_time, ingredients, instruc
 Feature (R8): View recipes based on custom criteria
 */
 
-SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id WHERE health_label LIKE '%vegan%';
+SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id WHERE health_label LIKE '%vegan%' LIMIT 10;
 
-SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id ORDER BY cook_time ASC;
+SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id ORDER BY cook_time ASC LIMIT 10;
 
-SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id WHERE cuisine LIKE '%Italian%' ORDER BY calories DESC;
+SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id WHERE cuisine LIKE '%Italian%' ORDER BY calories DESC LIMIT 10;
 
 /* 
 Feature (R9): Login user by authenticating username and password and show user profile details

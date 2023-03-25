@@ -8,7 +8,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: "recipe_db",
   user: "root",
-  password: "mysqlroot", // replace this password with the password for you root user
+  password: "root", // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -19,8 +19,6 @@ connection.connect(function (err) {
     console.log("connection created with Mysql successfully");
   }
 });
-
-//populateTables(connection);
 
 const app = express();
 const port = 5000;
@@ -33,21 +31,23 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getAllPosts", (req, res) => {
-  //res.send('Backend: Hello World!')
   connection.query(
-    "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id;",
+    "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id LIMIT 30;",
     function (err, results) {
       res.send(results); // results contains rows returned by server
     }
   );
 });
 
-/*app.get("/test", (req, res) => {
-  //res.send('Backend: Hello World!')
-  connection.query("SHOW tables", function (err, results) {
-    res.send(results); // results contains rows returned by server
-  });
-});*/
+app.get("/getUserPosts", (req, res) => {
+  let user_id = req.query.user_id;
+  connection.query(
+    `SELECT * FROM recipes WHERE recipes.user_id = ${user_id};`,
+    function (err, results) {
+      res.send(results); // results contains rows returned by server
+    }
+  );
+});
 
 app.get("/getCustomPosts", (req, res) => {
   let filterCategory = req.query.filterCategory;
@@ -94,20 +94,6 @@ app.get("/getCustomPosts", (req, res) => {
   });
 });
 
-let currentTime = new Date();
-let mySQLTime = new Date(
-  currentTime.getFullYear(),
-  currentTime.getMonth(),
-  currentTime.getDate(),
-  currentTime.getHours() - currentTime.getTimezoneOffset() / 60,
-  currentTime.getMinutes(),
-  currentTime.getSeconds(),
-  currentTime.getMilliseconds()
-)
-  .toISOString()
-  .slice(0, 19)
-  .replace("T", " ");
-
 app.post("/createPost", (req, res) => {
   // put error checking
   let dishName = req.body.recipeName;
@@ -122,10 +108,8 @@ app.post("/createPost", (req, res) => {
   let servings = req.body.servings;
   let picture = req.body.recipePicture;
   let userID = req.body.userID;
-  let createdAt = mySQLTime;
-  let updatedAt = mySQLTime;
-  let insertRecipe = `INSERT INTO recipes (user_id, dish_name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture, date_created, date_modified)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+  let insertRecipe = `INSERT INTO recipes (user_id, dish_name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
   connection.query(
     insertRecipe,
     [
@@ -140,9 +124,7 @@ app.post("/createPost", (req, res) => {
       healthLabel,
       healthScore,
       servings,
-      picture,
-      createdAt,
-      updatedAt,
+      picture
     ],
     (err, result, fields) => {
       if (err) {
@@ -155,12 +137,37 @@ app.post("/createPost", (req, res) => {
   );
 });
 
-app.get("/deletePost", (req, res) => {
-  // fix query
-  let post_id = req.query.postid;
-
+app.put("/updatePost", (req, res) => {
+  let dishName = req.body.recipeName;
+  let cuisine = req.body.cuisine;
+  let cookTime = req.body.cookTime;
+  let ingredients = req.body.ingredients;
+  let instructions = req.body.instructions;
+  let calories = req.body.calories;
+  let mealType = req.body.mealType;
+  let healthLabel = req.body.healthLabel;
+  let healthScore = req.body.healthScore;
+  let servings = req.body.servings;
+  let picture = req.body.recipePicture;
+  let recipeID = req.body.recipeID;
+  let updateRecipe = `UPDATE recipes SET dish_name='${dishName}', cuisine='${cuisine}', cook_time=${cookTime}, ingredients='${ingredients}', instructions='${instructions}', calories=${calories}, meal_type='${mealType}', health_label='${healthLabel}', health_score=${healthScore}, servings=${servings}, recipe_picture='${picture}' WHERE recipe_id=${recipeID};`
   connection.query(
-    `DELETE FROM recipes WHERE recipe_id = (SELECT recipe_id FROM posts WHERE post_id = ${post_id});`,
+    updateRecipe,
+    (err, result, fields) => {
+      if (err) {
+        console.log(err);
+        res.send("invalid");
+      } else {
+        res.send("valid");
+      }
+    }
+  );
+});
+
+app.delete("/deleteRecipes", (req, res) => {
+  let recipe_id = req.query.recipe_id;
+  connection.query(
+    `DELETE FROM recipes WHERE recipe_id = ${recipe_id};`,
     function (err, results, fields) {
       res.send(results);
     }
@@ -245,9 +252,9 @@ app.post("/updateUserData", (req, res) => {
   let userID = req.body.userID;
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
-  let preferenceOne = req.body.preferenceOne;
-  let preferenceTwo = req.body.preferenceTwo;
-  let preferenceThree = req.body.preferenceThree;
+  let preferenceOne = req.body.preferenceOne != "None" ? req.body.preferenceOne : null;
+  let preferenceTwo = req.body.preferenceTwo != "None" ? req.body.preferenceTwo : null;
+  let preferenceThree = req.body.preferenceThree != "None" ? req.body.preferenceThree : null;
   let userPicture = req.body.userPicture;
   let updateUserQuery = `UPDATE recipe_db.publicuserinfo SET first_name = ?, last_name = ?, 
   preference_one = ?, preference_two = ?, preference_three = ?, user_picture = ? WHERE user_id = ?`;
@@ -273,6 +280,93 @@ app.post("/updateUserData", (req, res) => {
         } else {
           res.send("invalid");
         }
+      }
+    }
+  );
+});
+
+// API routes for likes functionality
+app.get("/likes", (req, res) => {
+  let recipeID = req.query.recipeID
+  connection.query(
+    `SELECT COUNT(*) AS like_count FROM likes where recipe_id = ${recipeID};`,
+    function (err, results) {
+      res.send(results); // results contains rows returned by server
+    }
+  );
+});
+
+// get all users who liked this post
+app.get("/usersLiked", (req, res) => {
+  let userIDs = []
+  let recipeID = req.query.recipeID
+  connection.query(
+    `SELECT user_id FROM likes where recipe_id = ${recipeID};`,
+    function (err, results) {
+      for (let i = 0; i < results.length; ++i) {
+        userIDs.push(results[i].user_id)
+      }
+      res.send(userIDs); // results contains rows returned by server
+    }
+  );
+});
+
+// insert a new like when user likes post
+app.post("/likes", (req, res) => {
+  let recipeID = req.body.recipeID
+  let userID = req.body.userID
+  connection.query(
+    `INSERT INTO likes(recipe_id, user_id) VALUES (${recipeID}, ${userID});`,
+    function (err, results) {
+      if (err) {
+        res.send("invalid");
+      } else {
+        res.send("valid")
+      }
+    }
+  );
+});
+
+// removes like from table when user unlikes post
+app.delete("/likes", (req, res) => {
+  let recipeID = req.query.recipeID
+  let userID = req.query.userID
+  connection.query(
+    `DELETE FROM likes WHERE recipe_id = ${recipeID} AND user_id = ${userID};`,
+    function (err, results, fields) {
+      res.send(results);
+    }
+  );
+});
+
+app.post("/getSuggestedPosts", (req, res) => {
+  if (req.body.preferenceOne == null && req.body.preferenceTwo == null && req.body.preferenceThree == null) {
+    res.send("none");
+    return;
+  }
+  let baseQuery = "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id "
+  let conditions = ''
+  if (req.body.preferenceOne != null) {
+    conditions += `cuisine = '${req.body.preferenceOne}' `
+  }
+  if (req.body.preferenceTwo != null) {
+    conditions += `AND health_label LIKE '%${req.body.preferenceTwo}%'`
+  }
+  if (req.body.preferenceThree != null) {
+    conditions += `AND meal_type LIKE '%${req.body.preferenceThree}%' `
+  }
+  if (conditions != '') {
+    baseQuery += "WHERE "
+  }
+  baseQuery = baseQuery  + conditions + ';'
+  connection.query(
+    baseQuery,
+    function (err, results) {
+      if (results.length == 0) {
+        res.send("none")
+      }
+      else {
+        res.send(results); // results contains rows returned by server
       }
     }
   );

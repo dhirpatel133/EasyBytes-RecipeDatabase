@@ -7,11 +7,13 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Grid, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import IndividualRecipeCard from './individualRecipe';
+import { CircularProgress } from '@mui/material';
+import UserRecipeCard from './userRecipeCard';
 
 export default function MyRecipes(props) {
 
   var recipeData = {
-    recipe_name: "",
+    dish_name: "",
     cuisine: "",
     cook_time: "",
     ingredients: "",
@@ -41,6 +43,18 @@ export default function MyRecipes(props) {
   const handleClickOpenNewPost = () => {
     toggleShow()
   };
+  let id = sessionStorage.getItem("authenticated")
+  let url = `http://localhost:5000/getUserPosts?user_id=${id}`;
+  const [data, setData] = useState("");
+  
+    const getData = async (event) => {
+      const res = await fetch(url);    
+      const data = await res.json();
+      const outputData = data;
+      setData(outputData);
+    };
+
+    getData();
 
   return (
     <div>
@@ -53,14 +67,24 @@ export default function MyRecipes(props) {
           justifyContent: "center",
         }}
       >
-        Welcome to you recipes page. Here, you will find all the posts that you
-        have created!
+        Welcome to your recipes page. Here, you will find all the posts that you have created!
       </h4>
-      <Button onClick={() => handleClickOpenNewPost()} style={{"float": "right", "marginRight":"4%"}}>
+      <Button onClick={() => handleClickOpenNewPost()} style={{"float": "right", "marginRight":"2.8%"}}>
         <Tooltip title="Add new recipe">
           <AddCircleIcon fontSize='large'></AddCircleIcon>
         </Tooltip>
       </Button>
+      {data === "" ? <CircularProgress /> : 
+        <div style={{padding: 20}}>
+          <Grid container alignItems="stretch" spacing={2}>
+            {data.map((post) => (
+              <Grid key={post.recipe_id} item xs={4} sm={3}>
+                <UserRecipeCard post={post}></UserRecipeCard>
+              </Grid>
+        ))}
+        </Grid>
+          
+        </div>}
       {show && (
         <IndividualRecipeCard
           show={show}
@@ -72,49 +96,3 @@ export default function MyRecipes(props) {
     </div>
   );
 }
-
-
-
-
-
-/*const alertError = (message, errIcon) => {
-    Swal.fire({
-      position: "top",
-      icon: errIcon,
-      title: message,
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  };
-
-  const updateUser = () => {
-    if (firstName === "" || lastName === "") {
-      props.toggleShow();
-      let message = "Profile not updated. First and last name are required fields.";
-      let errIcon = "error";
-      alertError(message, errIcon);
-    } else {
-      Axios.post("http://localhost:5000/updateUserData", {
-        userID: sessionStorage.getItem("authenticated"),
-        firstName: firstName,
-        lastName: lastName,
-        preferenceOne: preferenceOne,
-        preferenceTwo: preferenceTwo,
-        preferenceThree: preferenceThree,
-        userPicture: userPicture,
-      }).then((response) => {
-        // console.log(response.data[0]["user_id"]);
-        if (response.data === "invalid") {
-          props.toggleShow();
-          let message = "Failed to update your data. Please try again.";
-          let errIcon = "error";
-          alertError(message, errIcon);
-        } else {
-          props.toggleShow();
-          let message = "Your profile has been updated!";
-          let errIcon = "success";
-          alertError(message, errIcon);
-        }
-      });
-    }
-  };*/
