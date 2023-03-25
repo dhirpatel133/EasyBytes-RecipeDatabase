@@ -101,7 +101,7 @@ const MainNavBar = () => {
       toggleShow();
     }
     if (setting === "Favourites") {
-      // TODO
+      navigate("/favouritedPosts")
     }
     if (setting === "Suggested") {
       navigate("/suggestedPosts")

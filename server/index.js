@@ -339,6 +339,7 @@ app.delete("/likes", (req, res) => {
   );
 });
 
+// gets all suggested posts for user based on preferences
 app.post("/getSuggestedPosts", (req, res) => {
   if (req.body.preferenceOne == null && req.body.preferenceTwo == null && req.body.preferenceThree == null) {
     res.send("none");
@@ -368,6 +369,65 @@ app.post("/getSuggestedPosts", (req, res) => {
       else {
         res.send(results); // results contains rows returned by server
       }
+    }
+  );
+});
+
+// API routes for favourites functionality
+app.get("/favourites", (req, res) => {
+  let userID = req.query.userID
+  connection.query(
+    `SELECT * FROM recipes JOIN favourites ON recipes.recipe_id = favourites.recipe_id JOIN users ON users.user_id = recipes.user_id WHERE favourites.user_id = ${userID};`,
+    function (err, results) {
+      if (results.length == 0) {
+        res.send("none")
+      }
+      else {
+        res.send(results); // results contains rows returned by server
+      }
+    }
+  );
+});
+
+// get all posts favourited by this user
+app.get("/postsFavourite", (req, res) => {
+  let recipeIDs = []
+  let userID = req.query.userID
+  connection.query(
+    `SELECT recipe_id FROM favourites where user_id = ${userID};`,
+    function (err, results) {
+      for (let i = 0; i < results.length; ++i) {
+        recipeIDs.push(results[i].recipe_id)
+      }
+      res.send(recipeIDs); // results contains rows returned by server
+    }
+  );
+});
+
+// insert a new post into favourites when user favourites post
+app.post("/favourites", (req, res) => {
+  let recipeID = req.body.recipeID
+  let userID = req.body.userID
+  connection.query(
+    `INSERT INTO favourites(recipe_id, user_id) VALUES (${recipeID}, ${userID});`,
+    function (err, results) {
+      if (err) {
+        res.send("invalid");
+      } else {
+        res.send("valid")
+      }
+    }
+  );
+});
+
+// removes favourite from table when user unfavourites post
+app.delete("/favourites", (req, res) => {
+  let recipeID = req.query.recipeID
+  let userID = req.query.userID
+  connection.query(
+    `DELETE FROM favourites WHERE recipe_id = ${recipeID} AND user_id = ${userID};`,
+    function (err, results) {
+      res.send(results);
     }
   );
 });

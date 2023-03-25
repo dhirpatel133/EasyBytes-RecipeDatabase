@@ -1,14 +1,10 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import MainNavBar from "./mainNavbar";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Grid, Tooltip } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useState } from 'react';
-import IndividualRecipeCard from './individualRecipe';
-import { CircularProgress } from '@mui/material';
-import UserRecipeCard from './userRecipeCard';
+import RecipeReviewCard from "./recipeCard";
 import Axios from "axios";
 
 export default function SuggestedPosts() {
@@ -90,7 +86,7 @@ export default function SuggestedPosts() {
           <Grid container alignItems="stretch" spacing={2}>
             {posts.map((post) => (
               <Grid key={post.recipe_id} item xs={4} sm={3}>
-                <UserRecipeCard post={post}></UserRecipeCard>
+                <RecipeReviewCard post={post}></RecipeReviewCard>
               </Grid>
         ))}
         </Grid>
