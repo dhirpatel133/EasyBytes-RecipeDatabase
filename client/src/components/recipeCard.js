@@ -48,6 +48,8 @@ const RecipeReviewCard = ({ post, onClick }) => {
   };
 
   const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState(false);
+  const [likedButtonColour, setlikedButtonColour] = useState("");
 
   const getLikeCount = () => {
     Axios.get(`http://localhost:5000/likes?recipeID=${post.recipe_id}`).then(
@@ -74,9 +76,6 @@ const RecipeReviewCard = ({ post, onClick }) => {
     });
   };
 
-  const [liked, setLiked] = useState(false);
-  const [likedButtonColour, setlikedButtonColour] = useState("");
-
   function updateLikes() {
     if (!liked) {
       Axios.post("http://localhost:5000/likes", {
@@ -94,8 +93,47 @@ const RecipeReviewCard = ({ post, onClick }) => {
     }
   }
 
+  const [favourite, setFavourite] = useState(false);
+  const [favouriteButtonColour, setFavouriteButtonColour] = useState("");
+
+  const getFavouriteButtonColour = () => {
+    Axios.get(
+      `http://localhost:5000/postsFavourite?userID=${sessionStorage.getItem("authenticated")}`
+    ).then((response) => {
+      console.log(response.data)
+      console.log(post.recipe_id)
+      if (response.data.includes(post.recipe_id)) {
+        setFavouriteButtonColour("primary");
+        setFavourite(true);
+      } else {
+        setFavouriteButtonColour("");
+        setFavourite(false);
+      }
+    });
+  };
+  
+  function updateFavourites() {
+    if (!favourite) {
+      Axios.post("http://localhost:5000/favourites", {
+        userID: sessionStorage.getItem("authenticated"),
+        recipeID: post.recipe_id,
+      });
+      setFavouriteButtonColour("primary");
+      setFavourite(true);
+    } else {
+      Axios.delete(
+        `http://localhost:5000/favourites?recipeID=${
+          post.recipe_id
+        }&userID=${sessionStorage.getItem("authenticated")}`
+      );
+      setFavouriteButtonColour("");
+      setFavourite(false);
+    }
+  }
+
   getLikeCount();
   getLikeButtonColour();
+  getFavouriteButtonColour();
 
   return (
     <Card sx={{ maxWidth: 500 }}>
@@ -110,9 +148,9 @@ const RecipeReviewCard = ({ post, onClick }) => {
           </Button>
         }
         action={
-          <IconButton aria-label="favourite">
+          <IconButton aria-label="favourite" onClick={updateFavourites}>
             <Tooltip title="Favourite recipe">
-              <BookmarkIcon />
+              <BookmarkIcon color={favouriteButtonColour} fontSize="large"/>
             </Tooltip>
           </IconButton>
         }
