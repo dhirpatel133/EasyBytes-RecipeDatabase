@@ -127,3 +127,8 @@ Note: You need to have both the frontend and backend running simultaneously
 - R10: Update a recipe made by user
 - R11: Delete a recipe made by user
 - Additional feature - R18: User Registration
+- Additional feature - R19: Like Recipe
+- Additional feature - R20: Comment on Recipe
+- Additional feature - R21: Favourite Recipe
+- Additional feature - R22: Recipe Suggestions Based off User Preferences
+
