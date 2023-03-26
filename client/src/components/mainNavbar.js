@@ -18,8 +18,8 @@ import UserProfileModal from "./userProfileModal";
 import { useEffect } from "react";
 import Axios from "axios";
 
-const pages = ["Recipes", "My Recipes"];
-const settings = ["Profile", "Favourites", "Suggested", "Logout"];
+const pages = ["Recipes", "My Recipes", "Favourites", "Suggested"];
+const settings = ["Profile", "Logout"];
 
 const MainNavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -88,6 +88,12 @@ const MainNavBar = () => {
     if (page === "My Recipes") {
       navigate("/myRecipes");
     }
+    if (page === "Favourites") {
+      navigate("/favouritedPosts")
+    }
+    if (page === "Suggested") {
+      navigate("/suggestedPosts")
+    }
   };
 
   function toggleShow() {
@@ -99,12 +105,6 @@ const MainNavBar = () => {
       fetchUserData();
       handleCloseUserMenu();
       toggleShow();
-    }
-    if (setting === "Favourites") {
-      navigate("/favouritedPosts")
-    }
-    if (setting === "Suggested") {
-      navigate("/suggestedPosts")
     }
     if (setting === "Logout") {
       sessionStorage.clear();

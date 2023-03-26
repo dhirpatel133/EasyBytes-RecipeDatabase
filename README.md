@@ -120,15 +120,15 @@ To run the backend:
 Note: You need to have both the frontend and backend running simultaneously
 
 # Features currently supported by Application
-- R6: Show all recipe posts
-- R7: Create a new recipe
-- R8: View recipes based on custom criteria
-- R9: User login and show user profile
-- R10: Update a recipe made by user
-- R11: Delete a recipe made by user
-- Additional feature - R18: User Registration
-- Additional feature - R19: Like Recipe
-- Additional feature - R20: Comment on Recipe
-- Additional feature - R21: Favourite Recipe
-- Additional feature - R22: Recipe Suggestions Based off User Preferences
+- R6: Show all recipe (Implementation: allRecipes.js, recipeCard.js under [here](./client/src/components/))
+- R7: Create a new recipe (Implementation: myRecipes.js, userRecipeCard.js under [here](./client/src/components/))
+- R8: View recipes based on custom criteria (Implementation: allRecipes.js under [here](./client/src/components/))
+- R9: User login and show user profile (Implementation: loginForm.jsx under [here](./client/src/components/accountBox/))
+- R10: Update a recipe made by user (Implementation: userRecipeCard.js under [here](./client/src/components/))
+- R11: Delete a recipe made by user (Implementation: userRecipeCard.js under [here](./client/src/components/))
+- Additional feature - R18: User Registration (Implementation: signupForm.jsx under [here](./client/src/components/accountBox/))
+- Additional feature - R19: Like Recipe (Implementation: recipeCard.js under [here](./client/src/components/)) 
+- Additional feature - R20: Comment on Recipe (Implementation: recipeCard.js under [here](./client/src/components/))
+- Additional feature - R21: Favourite Recipe (Implementation: recipeCard.js, favouritePosts.js under [here](./client/src/components/))
+- Additional feature - R22: Recipe Suggestions Based off User Preferences (Implementation: suggestedPosts.js under [here](./client/src/components/))
 

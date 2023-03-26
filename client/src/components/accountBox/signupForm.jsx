@@ -76,7 +76,7 @@ export function SignupForm(props) {
             userName: userName,
             password: password,
           }).then((res) => {
-            sessionStorage.setItem("authenticated", res.data[0]["user_id"]);
+            sessionStorage.setItem("authenticated", res.data[0]);
             let uID = sessionStorage.getItem("authenticated");
             navigate("/home", {
               state: { userId: uID },

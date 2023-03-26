@@ -58,12 +58,12 @@ export function LoginForm(props) {
         userName: userName,
         password: password,
       }).then((response) => {
-        // console.log(response.data[0]["user_id"]);
+        console.log(response);
         if (response.data === "invalid") {
           let message = "Username or password don't match. Please try again!";
           alertError(message);
         } else {
-          sessionStorage.setItem("authenticated", response.data[0]["user_id"]);
+          sessionStorage.setItem("authenticated", response.data[0]);
           let uID = sessionStorage.getItem("authenticated");
           navigate("/home", {
             state: { userId: uID },

@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
+import { Grid } from '@mui/material';
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import CommentIcon from "@mui/icons-material/Comment";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
@@ -18,7 +19,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ScrollBar from "react-custom-scrollbars";
 import { Tooltip } from "@mui/material";
 import Axios from "axios";
-import { useState } from "react";
+import { useState, setState } from "react";
+import MakeComment from "./makeComment";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import CommentCard from "./commentCard";
 
 function getFormattedDate(date) {
   return date.substring(0, 19).replace("T", " ");
@@ -38,15 +43,46 @@ const ExpandMore = styled((props) => {
 // primary for colour for like icon
 const RecipeReviewCard = ({ post, onClick }) => {
   const [expanded, setExpanded] = React.useState(false);
+  const [expanded1, setExpanded1] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+  const handleExpandClick1 = () => {
+    setExpanded1(!expanded1);
   };
 
   const handleButtonClick = () => {
     onClick();
   };
 
+  const navigate = useNavigate();
+
+  const [show, setShow] = useState(false)
+  function toggleShow() {
+    setShow(!show);
+  }
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("authenticated")) {
+      navigate("/");
+    }
+  }, []);
+
+  const [comments, setComments] = useState("none")
+  const fetchCommentsData = () => {
+    Axios.get(`http://localhost:5000/getComments?recipeID=${post.recipe_id}`).then((response) => {
+        console.log(response)
+      if (response.data === "none") {
+        setComments("none")
+      } else {
+        setComments(response.data);
+      }
+    });
+  };
+
+  fetchCommentsData();
+  console.log(comments)
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [likedButtonColour, setlikedButtonColour] = useState("");
@@ -100,8 +136,6 @@ const RecipeReviewCard = ({ post, onClick }) => {
     Axios.get(
       `http://localhost:5000/postsFavourite?userID=${sessionStorage.getItem("authenticated")}`
     ).then((response) => {
-      console.log(response.data)
-      console.log(post.recipe_id)
       if (response.data.includes(post.recipe_id)) {
         setFavouriteButtonColour("primary");
         setFavourite(true);
@@ -135,7 +169,10 @@ const RecipeReviewCard = ({ post, onClick }) => {
   getLikeButtonColour();
   getFavouriteButtonColour();
 
+  
+
   return (
+    <div>
     <Card sx={{ maxWidth: 500 }}>
       <CardHeader
         avatar={
@@ -191,6 +228,7 @@ const RecipeReviewCard = ({ post, onClick }) => {
             {post.ingredients.replaceAll("|", ", ")}
           </Typography>
         </ScrollBar>
+        
       </CardContent>
       <CardActions disableSpacing>
         <Typography variant="subheading1" color="black" margin={1}>
@@ -201,11 +239,19 @@ const RecipeReviewCard = ({ post, onClick }) => {
             <ThumbUpIcon color={likedButtonColour} />
           </Tooltip>
         </IconButton>
-        <IconButton aria-label="comment on post">
+        <IconButton aria-label="comment on post" onClick={toggleShow }>
           <Tooltip title="Comment on post">
             <CommentIcon />
           </Tooltip>
         </IconButton>
+          <ExpandMore
+            onClick={handleExpandClick1}
+            aria-expanded={expanded1}
+            aria-label="show more"
+            style={{marginLeft : -10}}
+          >
+            <Button>Show Comments</Button>
+          </ExpandMore>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -217,6 +263,7 @@ const RecipeReviewCard = ({ post, onClick }) => {
           </Tooltip>
         </ExpandMore>
       </CardActions>
+      
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>Instructions:</Typography>
@@ -225,7 +272,33 @@ const RecipeReviewCard = ({ post, onClick }) => {
           ))}
         </CardContent>
       </Collapse>
+
+      <Collapse in={expanded1} timeout="auto" unmountOnExit>
+        <CardContent>
+          <ScrollBar style={ comments === "none" ? {} : {height: 150} }>
+            {comments === "none" ? <h3 style={{display: "flex", justifyContent: "center"}}> No Comments</h3> : 
+              <div>
+                <Grid container>
+                  {comments.map((comment) => (
+                    <Grid key={comment.comment_id} item xs={16}>
+                      <CommentCard comment={comment}></CommentCard>
+                    </Grid>
+                  ))}
+              </Grid>
+              </div>}    
+          </ScrollBar>
+        </CardContent> 
+    </Collapse>
+      
     </Card>
+    {show && (
+        <MakeComment
+          show={show}
+          toggleShow={toggleShow}
+          recipeID = {post.recipe_id}
+        />
+      )}
+    </div>
   );
 };
 
