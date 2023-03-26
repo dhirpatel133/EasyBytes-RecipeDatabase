@@ -8,7 +8,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: "recipe_db",
   user: "root",
-  password: "password", // replace this password with the password for you root user
+  password: "root", // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -30,15 +30,20 @@ app.get("/", (req, res) => {
   res.send("Welcome to EasyBytes API!");
 });
 
+// API route to retrive all the recipes from the database and return to the frontend
 app.get("/getAllPosts", (req, res) => {
+  // query to be executed by backend
   connection.query(
-    "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id LIMIT 30;",
+    `SELECT recipe_id, dish_name, cuisine, cook_time, ingredients, instructions, 
+    calories, meal_type, health_label, health_score, servings, recipe_picture, date_modified,
+    first_name, last_name FROM recipes JOIN users ON recipes.user_id = users.user_id LIMIT 30;`,
     function (err, results) {
       res.send(results); // results contains rows returned by server
     }
   );
 });
 
+// // API route to retrive all the recipes from the database and return to the frontend
 app.get("/getUserPosts", (req, res) => {
   let user_id = req.query.user_id;
   connection.query(
@@ -49,17 +54,18 @@ app.get("/getUserPosts", (req, res) => {
   );
 });
 
+// API route to retrive all the recipes from the database and return to the frontend
 app.get("/getCustomPosts", (req, res) => {
   let filterCategory = req.query.filterCategory;
   let filterValue = req.query.filterValue;
   let sortValue = req.query.sortValue;
   let baseQuery =
-    "SELECT * FROM recipes JOIN users ON recipes.user_id = users.user_id";
+    `SELECT recipe_id, dish_name, cuisine, cook_time, ingredients, instructions, 
+    calories, meal_type, health_label, health_score, servings, recipe_picture, date_modified, 
+    first_name, last_name FROM recipes JOIN users ON recipes.user_id = users.user_id`;
   let filterOnlyQuery = " WHERE ";
   let sortOnlyQuery = ` ORDER BY ${sortValue}`;
-  //let filterAndSortQuery = `SELECT * FROM recipes JOIN posts ON recipes.recipe_id = posts.recipe_id WHERE ${filterCategory} LIKE '%${filterValue}%' ORDER BY ${sortCategory} ${sortValue}`
   let finalQuery = baseQuery;
-
   if (filterCategory && filterValue && sortValue === undefined) {
     let filterCategories = filterCategory.split(",");
     let filterValues = filterValue.split(",");
@@ -88,14 +94,13 @@ app.get("/getCustomPosts", (req, res) => {
     }
     finalQuery += sortOnlyQuery;
   }
-
   connection.query(finalQuery, function (err, results, fields) {
     res.send(results); // results contains rows returned by server
   });
 });
 
+// API route to create a new recipes (add new tuple) to the database
 app.post("/createPost", (req, res) => {
-  // put error checking
   let dishName = req.body.recipeName;
   let cuisine = req.body.cuisine;
   let cookTime = req.body.cookTime;
@@ -108,24 +113,14 @@ app.post("/createPost", (req, res) => {
   let servings = req.body.servings;
   let picture = req.body.recipePicture;
   let userID = req.body.userID;
-  let insertRecipe = `INSERT INTO recipes (user_id, dish_name, cuisine, cook_time, ingredients, instructions, calories, meal_type, health_label, health_score, servings, recipe_picture)
+  let insertRecipe = `INSERT INTO recipes (user_id, dish_name, cuisine, cook_time, ingredients, instructions, calories, 
+    meal_type, health_label, health_score, servings, recipe_picture)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
   connection.query(
     insertRecipe,
     [
-      userID,
-      dishName,
-      cuisine,
-      cookTime,
-      ingredients,
-      instructions,
-      calories,
-      mealType,
-      healthLabel,
-      healthScore,
-      servings,
-      picture
-    ],
+      userID, dishName, cuisine, cookTime, ingredients, instructions, calories, mealType,
+      healthLabel, healthScore, servings, picture],
     (err, result, fields) => {
       if (err) {
         console.log(err);
@@ -135,44 +130,6 @@ app.post("/createPost", (req, res) => {
       }
     }
   );
-});
-
-app.post("/createComment", (req, res) => {
-  // put error checking
-  let content = req.body.content;
-  let userID = req.body.userID;
-  let recipeID = req.body.recipeID;
-  let insertComment = `INSERT INTO comments (user_id, recipe_id, content) VALUES (?, ?, ?);`;
-  connection.query(
-    insertComment,
-    [
-      userID,
-      recipeID,
-      content
-    ],
-    (err, result, fields) => {
-      if (err) {
-        console.log(err);
-        res.send("invalid");
-      } else {
-        res.send("valid");
-      }
-    }
-  );
-});
-
-app.get("/getComments", (req, res) => {
-  let recipeID = req.query.recipeID
-  let comments = []
-  connection.query(
-    `SELECT * from comments JOIN users where users.user_id = comments.user_id and recipe_id = ${recipeID};`,
-    function (err, results) {
-      for (let i = 0; i < results.length; ++i) {
-        comments.push(results[i])
-      }
-      res.send(comments); // results contains rows returned by server
-    }
-    );
 });
 
 app.put("/updatePost", (req, res) => {
@@ -188,7 +145,9 @@ app.put("/updatePost", (req, res) => {
   let servings = req.body.servings;
   let picture = req.body.recipePicture;
   let recipeID = req.body.recipeID;
-  let updateRecipe = `UPDATE recipes SET dish_name='${dishName}', cuisine='${cuisine}', cook_time=${cookTime}, ingredients='${ingredients}', instructions='${instructions}', calories=${calories}, meal_type='${mealType}', health_label='${healthLabel}', health_score=${healthScore}, servings=${servings}, recipe_picture='${picture}' WHERE recipe_id=${recipeID};`
+  let updateRecipe = `UPDATE recipes SET dish_name='${dishName}', cuisine='${cuisine}', cook_time=${cookTime}, 
+  ingredients='${ingredients}', instructions='${instructions}', calories=${calories}, meal_type='${mealType}', 
+  health_label='${healthLabel}', health_score=${healthScore}, servings=${servings}, recipe_picture='${picture}' WHERE recipe_id=${recipeID};`
   connection.query(
     updateRecipe,
     (err, result, fields) => {
@@ -202,6 +161,7 @@ app.put("/updatePost", (req, res) => {
   );
 });
 
+// API route to delete a recipe (add new tuple) to the database
 app.delete("/deleteRecipes", (req, res) => {
   let recipe_id = req.query.recipe_id;
   connection.query(
@@ -212,18 +172,16 @@ app.delete("/deleteRecipes", (req, res) => {
   );
 });
 
-// insert new user into the users table
+// API route to insert a new user into the users table
 app.post("/register", async (req, res) => {
   let userName = req.body.userName;
   let password = req.body.password;
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
-
   const hash = await bcrypt.hash(password, 7);
-
   let insertUserQuery = `INSERT INTO users (user_name, user_password, first_name, last_name, 
-    user_picture, preference_one, preference_two, preference_three) VALUES (?, ?, ?, ?, null, null, null, null);`;
-
+    user_picture, preference_one, preference_two, preference_three) 
+    VALUES (?, ?, ?, ?, null, null, null, null);`;
   connection.query(
     insertUserQuery,
     [userName, hash, firstName, lastName],
@@ -239,14 +197,12 @@ app.post("/register", async (req, res) => {
   );
 });
 
-// validate existing user logging in
+// API route to validate existing user when they are logging in
 app.post("/login", async (req, res) => {
   let userName = req.body.userName;
   let password = req.body.password;
-  let insertUserQuery = `SELECT * FROM users WHERE user_name = ?`;
-
+  let insertUserQuery = `SELECT user_id, user_password FROM users WHERE user_name = ?`;
   const hash = await bcrypt.hash(password, 7);
-
   connection.query(insertUserQuery, [userName], async (err, result, fields) => {
     // if there's an error getting the user, then prompt the user to try again - user most likely not registered
     if (err) {
@@ -255,7 +211,8 @@ app.post("/login", async (req, res) => {
       if (result.length > 0) {
         const isMatch = await bcrypt.compare(password, result[0].user_password);
         if (isMatch) {
-          res.send(result);
+          console.log(result[0].user_id)
+          res.send([result[0].user_id]);
         } else {
           res.send("invalid");
         }
@@ -266,11 +223,10 @@ app.post("/login", async (req, res) => {
   });
 });
 
-// fetch user data
+// API route to fetch user data of the user who is logged in
 app.post("/userData", (req, res) => {
   let userID = req.body.userID;
-  let fetchUserQuery = `SELECT * FROM recipe_db.publicuserinfo WHERE user_id = ?`;
-
+  let fetchUserQuery = `SELECT * FROM publicuserinfo WHERE user_id = ?`;
   connection.query(fetchUserQuery, [userID], (err, result, fields) => {
     // if there's an error getting the user, then prompt the user to try again - user most likely not registered
     if (err) {
@@ -285,7 +241,7 @@ app.post("/userData", (req, res) => {
   });
 });
 
-// fetch user data
+// API route to update the data for the user currently logged in
 app.post("/updateUserData", (req, res) => {
   let userID = req.body.userID;
   let firstName = req.body.firstName;
@@ -294,9 +250,8 @@ app.post("/updateUserData", (req, res) => {
   let preferenceTwo = req.body.preferenceTwo != "None" ? req.body.preferenceTwo : null;
   let preferenceThree = req.body.preferenceThree != "None" ? req.body.preferenceThree : null;
   let userPicture = req.body.userPicture;
-  let updateUserQuery = `UPDATE recipe_db.publicuserinfo SET first_name = ?, last_name = ?, 
+  let updateUserQuery = `UPDATE publicuserinfo SET first_name = ?, last_name = ?, 
   preference_one = ?, preference_two = ?, preference_three = ?, user_picture = ? WHERE user_id = ?`;
-
   connection.query(
     updateUserQuery,
     [
@@ -323,7 +278,7 @@ app.post("/updateUserData", (req, res) => {
   );
 });
 
-// API routes for likes functionality
+// API routes to retrieve the number of likes for a post
 app.get("/likes", (req, res) => {
   let recipeID = req.query.recipeID
   connection.query(
@@ -334,7 +289,7 @@ app.get("/likes", (req, res) => {
   );
 });
 
-// get all users who liked this post
+// API routes to retrieve all the users who have liked a specific recipe
 app.get("/usersLiked", (req, res) => {
   let userIDs = []
   let recipeID = req.query.recipeID
@@ -349,7 +304,7 @@ app.get("/usersLiked", (req, res) => {
   );
 });
 
-// insert a new like when user likes post
+// API routes to insert a new like into the likes table when user likes post
 app.post("/likes", (req, res) => {
   let recipeID = req.body.recipeID
   let userID = req.body.userID
@@ -365,7 +320,7 @@ app.post("/likes", (req, res) => {
   );
 });
 
-// removes like from table when user unlikes post
+// // API routes to delete a like from the likes table when user unlikes post
 app.delete("/likes", (req, res) => {
   let recipeID = req.query.recipeID
   let userID = req.query.userID
@@ -377,7 +332,7 @@ app.delete("/likes", (req, res) => {
   );
 });
 
-// gets all suggested posts for user based on preferences
+// API routes to retrieve all suggested posts for user based on preferences
 app.post("/getSuggestedPosts", (req, res) => {
   if (req.body.preferenceOne == null && req.body.preferenceTwo == null && req.body.preferenceThree == null) {
     res.send("none");
@@ -411,11 +366,12 @@ app.post("/getSuggestedPosts", (req, res) => {
   );
 });
 
-// API routes for favourites functionality
+// API routes to retrieve all favourited recipes for a user
 app.get("/favourites", (req, res) => {
   let userID = req.query.userID
   connection.query(
-    `SELECT * FROM recipes JOIN favourites ON recipes.recipe_id = favourites.recipe_id JOIN users ON users.user_id = recipes.user_id WHERE favourites.user_id = ${userID};`,
+    `SELECT * FROM recipes JOIN favourites ON recipes.recipe_id = favourites.recipe_id JOIN 
+    users ON users.user_id = recipes.user_id WHERE favourites.user_id = ${userID};`,
     function (err, results) {
       if (results.length == 0) {
         res.send("none")
@@ -427,7 +383,7 @@ app.get("/favourites", (req, res) => {
   );
 });
 
-// get all posts favourited by this user
+// API routes to retrieve all recipe_ids favourited by this user
 app.get("/postsFavourite", (req, res) => {
   let recipeIDs = []
   let userID = req.query.userID
@@ -442,7 +398,7 @@ app.get("/postsFavourite", (req, res) => {
   );
 });
 
-// insert a new post into favourites when user favourites post
+// API routes to insert a new post into favourites when user favourites post
 app.post("/favourites", (req, res) => {
   let recipeID = req.body.recipeID
   let userID = req.body.userID
@@ -458,7 +414,7 @@ app.post("/favourites", (req, res) => {
   );
 });
 
-// removes favourite from table when user unfavourites post
+// API routes to remove favourite from table when user unfavourites post
 app.delete("/favourites", (req, res) => {
   let recipeID = req.query.recipeID
   let userID = req.query.userID
@@ -466,6 +422,45 @@ app.delete("/favourites", (req, res) => {
     `DELETE FROM favourites WHERE recipe_id = ${recipeID} AND user_id = ${userID};`,
     function (err, results) {
       res.send(results);
+    }
+  );
+});
+
+// // API routes to retrieve all comments for a specific recipe
+app.get("/getComments", (req, res) => {
+  let recipeID = req.query.recipeID
+  let comments = []
+  connection.query(
+    `SELECT * from comments JOIN users where users.user_id = comments.user_id and recipe_id = ${recipeID};`,
+    function (err, results) {
+      for (let i = 0; i < results.length; ++i) {
+        comments.push(results[i])
+      }
+      res.send(comments); // results contains rows returned by server
+    }
+    );
+});
+
+// API routes to insert a new comment into the comments table when a user posts a new comment
+app.post("/createComment", (req, res) => {
+  let content = req.body.content;
+  let userID = req.body.userID;
+  let recipeID = req.body.recipeID;
+  let insertComment = `INSERT INTO comments (user_id, recipe_id, content) VALUES (?, ?, ?);`;
+  connection.query(
+    insertComment,
+    [
+      userID,
+      recipeID,
+      content
+    ],
+    (err, result, fields) => {
+      if (err) {
+        console.log(err);
+        res.send("invalid");
+      } else {
+        res.send("valid");
+      }
     }
   );
 });
