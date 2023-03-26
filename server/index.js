@@ -8,7 +8,7 @@ const connection = mysql2.createConnection({
   port: 3306,
   database: "recipe_db",
   user: "root",
-  password: "root", // replace this password with the password for you root user
+  password: "password", // replace this password with the password for you root user
 });
 
 connection.connect(function (err) {
@@ -135,6 +135,44 @@ app.post("/createPost", (req, res) => {
       }
     }
   );
+});
+
+app.post("/createComment", (req, res) => {
+  // put error checking
+  let content = req.body.content;
+  let userID = req.body.userID;
+  let recipeID = req.body.recipeID;
+  let insertComment = `INSERT INTO comments (user_id, recipe_id, content) VALUES (?, ?, ?);`;
+  connection.query(
+    insertComment,
+    [
+      userID,
+      recipeID,
+      content
+    ],
+    (err, result, fields) => {
+      if (err) {
+        console.log(err);
+        res.send("invalid");
+      } else {
+        res.send("valid");
+      }
+    }
+  );
+});
+
+app.get("/getComments", (req, res) => {
+  let recipeID = req.query.recipeID
+  let comments = []
+  connection.query(
+    `SELECT * from comments JOIN users where users.user_id = comments.user_id and recipe_id = ${recipeID};`,
+    function (err, results) {
+      for (let i = 0; i < results.length; ++i) {
+        comments.push(results[i])
+      }
+      res.send(comments); // results contains rows returned by server
+    }
+    );
 });
 
 app.put("/updatePost", (req, res) => {
