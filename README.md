@@ -50,7 +50,7 @@ const connection = mysql2.createConnection({
 ```
 Note: You need to replace the password and user in the connection object above with the password and username you have set on your local machine
 
-There is a file under the server folder named **populate-db-sample-data.js** which will use the createsampletables.sql file to create the required tables as well as populate the tables with the sample data which can be found [here](./db/sample-data)
+There is a file under the server folder named **populate-db-sample-data.js** which will use the createsampletables.sql [file](./db/createsampletables.sql) to create the required tables as well as populate the tables with the sample data which can be found [here](./db/sample-data)
 
 To populate the tables with sample data, run the following commands:
 
@@ -87,7 +87,7 @@ const connection = mysql2.createConnection({
 ```
 Note: You need to replace the password and user in the connection object above with the password and username you have set on your local machine
 
-There is a file under the server folder named **populate-db-production-data.js** which will use the createproductiontables.sql file to create the required tables and views as well as populate the tables with the production data which can be found [here](./db/production-data)
+There is a file under the server folder named **populate-db-production-data.js** which will use the createproductiontables.sql [file](./db/createproductiontables.sql) to create the required tables and views as well as populate the tables with the production data which can be found [here](./db/production-data)
 
 To populate the tables with production data, run the following commands:
 
