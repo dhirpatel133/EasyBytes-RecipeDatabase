@@ -55,8 +55,8 @@ const diet_preference = [
   "None",
   "Vegetarian",
   "Vegan",
-  "Dairy-Free",
-  "Gluten-Free"
+  "Dairy Free",
+  "Gluten Free"
 ];
 
 export default function FormDialog(props) {
