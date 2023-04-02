@@ -71,7 +71,7 @@ for recipe in recipeList:
 print(caloriesList)
 print(len(recipeList))
 
-with open('test.csv', 'a', newline='') as f:
+with open('recipes.csv', 'a', newline='') as f:
         thewriter = csv.writer(f)                
         thewriter.writerow(['name', 'cuisine', 'time', 'ingredients', 'instructions', 'calories',
                'type', 'health_label', 'health_score', 'servings', 'picture'])
