@@ -1,0 +1,6 @@
+user_id,user_name,password,first_name,last_name,picture,preference_one,preference_two,preference_three
+300,Easy_Bytes,$2y$10$2ERdAt4e.qQ5gpEvKLpE7eowpIAuntvboDWyzez0pFUV3Ls6wBfCq,Easy,Bytes,https://picsum.photos/id/237/200/300,American,Gluten-Free,Lunch
+301,soham_06,$2y$10$alGWFWdXnKpKmdrsZd8rVeV8xEPF05nmnV9upz78GLDmT0jq/6/GO,Soham,Shah,https://fastly.picsum.photos/id/18/2500/1667.jpg?hmac=JR0Z_jRs9rssQHZJ4b7xKF82kOj8-4Ackq75D_9Wmz8,Italian,Vegetarian,Dinner
+302,dhir_03,$2y$10$I80dQeZb8dh2lHUTc8c9r.NxhOAmS.9FS5Kf.IWnWHo0aRIatY4Vy,Dhir,Patel,https://fastly.picsum.photos/id/15/2500/1667.jpg?hmac=Lv03D1Y3AsZ9L2tMMC1KQZekBVaQSDc1waqJ54IHvo4,Indian,Vegan,Lunch
+303,guneet_21,$2y$10$xCbdsMtctekBrazrDFugh.zgSoF05TNWt/vcg1XhSnSdwklQl6rOK,Guneet,Bola,https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE,Mexican,Dairy-Free,Lunch
+304,richa_20,$2y$10$qK3.t6CJlVfJ0AlhZX9y1OzTyfSYQ6Yfr5ZoIkQvqWOazZX6YbUza,Richa,Dalal,https://fastly.picsum.photos/id/17/2500/1667.jpg?hmac=HD-JrnNUZjFiP2UZQvWcKrgLoC_pc_ouUSWv8kHsJJY,American,Vegetarian,Dessert
