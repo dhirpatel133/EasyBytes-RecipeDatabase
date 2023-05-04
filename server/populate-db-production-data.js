@@ -3,13 +3,7 @@ import fs from 'fs'
 import { parse } from 'csv-parse';
 import readline from 'readline'
 
-const connection = mysql2.createConnection({
-  host: 'localhost',
-  port: 3306,
-  database: 'recipe_db',
-  user: 'root',
-  password: 'root' // replace this password with the password for you root user
-});
+const connection = require("./database").default;
 
 function createTables() {
   var createTableQueries = readline.createInterface({
