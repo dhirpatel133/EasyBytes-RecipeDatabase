@@ -200,7 +200,6 @@ app.post("/login", async (req, res) => {
       if (result.length > 0) {
         const isMatch = await bcrypt.compare(password, result[0].user_password);
         if (isMatch) {
-          console.log(result[0].user_id);
           res.send([result[0].user_id]);
         } else {
           res.send("invalid");
