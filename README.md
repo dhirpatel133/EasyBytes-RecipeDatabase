@@ -4,13 +4,7 @@ EasyBytes is a social recipe sharing platform that allows users to search for th
 
 ![EasyBytesLogo](https://user-images.githubusercontent.com/65190493/214759224-2ca6f9b6-a8b6-4b7c-9a8f-bf91a9ab50f5.png)
 
-This repo contains the initial set up of the database project "EasyBytes" for CS348
-
-# Team Members:
-- Dhir Patel
-- Guneet Bola
-- Richa Dalal
-- Soham Shah
+This repo contains the full-stack code for the database application "EasyBytes"
 
 # Create a local instance of the database
 
